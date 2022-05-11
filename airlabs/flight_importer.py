@@ -21,8 +21,11 @@ def get_all_flights(dep_iata_code: str, arr_iata_code: str) -> list:
     """
     to_import = []
     params = {"api_key": API_KEY, "dep_iata": dep_iata_code, "arr_iata": arr_iata_code}
-    flights = requests.get(url=f"{AIRLABS_URL}/flights", params=params).json()
+    logger.debug(f"{dep_iata_code=} - {arr_iata_code=}")
+    flights = requests.get(url=f"{AIRLABS_URL}/schedules", params=params).json()
     for flight in flights.get("response", []):
+
+        logger.debug(f"{flight.get('flight_number')=}")
         _ = {
             "id": f"flight-{flight.get('flight_number')}",
             "type": "Flight",
@@ -34,28 +37,44 @@ def get_all_flights(dep_iata_code: str, arr_iata_code: str) -> list:
             "dateDeparture": {
                 "type": "DateTime",
                 "value": format_datetime(flight.get("dep_time")),
+                "metadata": {
+                    "description": {"type": "Text", "value": "Departure date"}
+                },
             },
             "dateArrival": {
                 "type": "DateTime",
                 "value": format_datetime(flight.get("arr_time")),
+                "metadata": {"description": {"type": "Text", "value": "Arrival time"}},
             },
             "dateSTOT": {  # Scheduled Take Off Time
                 "type": "DateTime",
                 "value": format_datetime(flight.get("dep_time")),
+                "metadata": {
+                    "description": {"type": "Text", "value": "Scheduled Take Off Time"}
+                },
             },
             "dateETOT": {  # Estimated Take Off Time
                 "type": "DateTime",
                 "value": format_datetime(
                     flight.get("dep_estimated", flight.get("dep_time"))
                 ),  # if no estimated time, use scheduled time
+                "metadata": {
+                    "description": {"type": "Text", "value": "Estimated arrival time"}
+                },
             },
             "dateELDT": {  # Estimated Landing Time
                 "type": "DateTime",
                 "value": format_datetime(flight.get("arr_estimated")),
+                "metadata": {
+                    "description": {"type": "Text", "value": "Estimated Landing Time"}
+                },
             },
             "dateSLDT": {  # Scheduled Landing Time
                 "type": "DateTime",
                 "value": format_datetime(flight.get("arr_time")),
+                "metadata": {
+                    "description": {"type": "Text", "value": "Scheduled Landing Time"}
+                },
             },
             "hasAircraft": {
                 "type": "Relationship",
@@ -72,6 +91,21 @@ def get_all_flights(dep_iata_code: str, arr_iata_code: str) -> list:
             "belongsToAirline": {
                 "type": "Relationship",
                 "value": f"airline-{flight.get('airline_icao')}",
+            },
+            "delayed": {
+                "type": "Integer",
+                "value": flight.get("delayed", 0),
+                "metadata": {
+                    "unit": {
+                        "type": "Text",
+                        "value": "minutes",
+                    }
+                },
+            },
+            "duration": {
+                "type": "Integer",
+                "value": flight.get("duration", 0),
+                "metadata": {"unit": {"type": "Text", "value": "minutes"}},
             },
         }
         to_import.append(_)
@@ -93,7 +127,7 @@ def import_flights(flights: list) -> bool:
     params = {"actionType": "append", "entities": flights}
     res = requests.post(url=f"{ORION_URL}/op/update", json=params)
     if res.ok:
-        logger.info(f"{len(flights)} flights imported successfully.")
+        logger.success(f"{len(flights)} flights imported successfully.")
         return True
     else:
         logger.error(f"{len(flights)} flights could not be imported.")

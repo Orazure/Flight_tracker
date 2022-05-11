@@ -31,14 +31,29 @@ def get_all_flights(dep_iata_code: str, arr_iata_code: str) -> list:
             "location": {
                 "type": "GeoJson:Point",
                 "value": [flight.get("lat"), flight.get("lng")],
+                "metadata": {
+                    "description": {
+                        "type": "Text",
+                        "value": "Postion with the Latitude and Longitude",
+                    }
+                },
             },
             "speed": {"type": "Number", "value": flight.get("speed")},
-            "altitude": {"type": "Number", "value": flight.get("alt")},
+            "altitude": {
+                "type": "Number",
+                "value": flight.get("alt"),
+                "metadata": {"unit": {"type": "Text", "value": "meters"}},
+            },
             "departure": {"type": "Text", "value": flight.get("dep_iata")},
             "arrival": {"type": "Text", "value": flight.get("arr_iata")},
             "aircraft_icao": {"type": "Text", "value": flight.get("aircraft_icao")},
             "aircraft_iata": {"type": "Text", "value": flight.get("aircraft_iata")},
             "airline_iata": {"type": "Text", "value": flight.get("airline_iata")},
+            "direction": {
+                "type": "Number",
+                "value": flight.get("dir"),
+                "metadata": {"unit": {"type": "Text", "value": "degrees"}},
+            },
         }
         to_import.append(_)
     return to_import
