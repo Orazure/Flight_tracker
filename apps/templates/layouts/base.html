@@ -1,0 +1,227 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="apple-touch-icon" sizes="76x76" href="/static/assets/img/apple-icon.png">
+  <link rel="icon" type="image/png" href="/static/assets/img/favicon.png">
+
+  <title>
+   Flight Tracker {% block title %}{% endblock %}
+  </title>
+  
+  <!--     Fonts and icons     -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+  <!-- Nucleo Icons -->
+  <link href="/static/assets/css/nucleo-icons.css" rel="stylesheet" />
+  <link href="/static/assets/css/nucleo-svg.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/assets/js/leaflet.css" />
+  <!-- Font Awesome Icons -->
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <link href="/static/assets/css/nucleo-svg.css" rel="stylesheet" />
+  <!-- CSS Files -->
+  <link id="pagestyle" href="/static/assets/css/soft-ui-dashboard.css?v=1.0.3" rel="stylesheet" />
+
+  <!-- Specific CSS goes HERE -->
+  {% block stylesheets %}{% endblock stylesheets %}
+
+</head>
+<body class="g-sidenav-show  bg-gray-100">
+
+  {% include "includes/sidebar.html" %}
+
+  <main class="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg ">
+
+    {% include "includes/navigation.html" %}
+
+    {% block content %}{% endblock content %}
+
+  </main>
+
+  {% include "includes/fixed-plugin.html" %}
+
+  {% include "includes/scripts.html" %}
+
+  <!-- Specific JS goes HERE --> 
+  {% block javascripts %}{% endblock javascripts %}
+
+  <script>
+    
+
+	  window.flags = {"AD":"🇦🇩","AE":"🇦🇪","AF":"🇦🇫","AG":"🇦🇬","AI":"🇦🇮","AL":"🇦🇱","AM":"🇦🇲","AO":"🇦🇴","AQ":"🇦🇶","AR":"🇦🇷","AS":"🇦🇸","AT":"🇦🇹","AU":"🇦🇺","AW":"🇦🇼","AX":"🇦🇽","AZ":"🇦🇿","BA":"🇧🇦","BB":"🇧🇧","BD":"🇧🇩","BE":"🇧🇪","BF":"🇧🇫","BG":"🇧🇬","BH":"🇧🇭","BI":"🇧🇮","BJ":"🇧🇯","BL":"🇧🇱","BM":"🇧🇲","BN":"🇧🇳","BO":"🇧🇴","BQ":"🇧🇶","BR":"🇧🇷","BS":"🇧🇸","BT":"🇧🇹","BV":"🇧🇻","BW":"🇧🇼","BY":"🇧🇾","BZ":"🇧🇿","CA":"🇨🇦","CC":"🇨🇨","CD":"🇨🇩","CF":"🇨🇫","CG":"🇨🇬","CH":"🇨🇭","CI":"🇨🇮","CK":"🇨🇰","CL":"🇨🇱","CM":"🇨🇲","CN":"🇨🇳","CO":"🇨🇴","CR":"🇨🇷","CU":"🇨🇺","CV":"🇨🇻","CW":"🇨🇼","CX":"🇨🇽","CY":"🇨🇾","CZ":"🇨🇿","DE":"🇩🇪","DJ":"🇩🇯","DK":"🇩🇰","DM":"🇩🇲","DO":"🇩🇴","DZ":"🇩🇿","EC":"🇪🇨","EE":"🇪🇪","EG":"🇪🇬","EH":"🇪🇭","ER":"🇪🇷","ES":"🇪🇸","ET":"🇪🇹","EU":"🇪🇺","FI":"🇫🇮","FJ":"🇫🇯","FK":"🇫🇰","FM":"🇫🇲","FO":"🇫🇴","FR":"🇫🇷","GA":"🇬🇦","UK":"🇬🇧","GB":"🇬🇧","GD":"🇬🇩","GE":"🇬🇪","GF":"🇬🇫","GG":"🇬🇬","GH":"🇬🇭","GI":"🇬🇮","GL":"🇬🇱","GM":"🇬🇲","GN":"🇬🇳","GP":"🇬🇵","GQ":"🇬🇶","GR":"🇬🇷","GS":"🇬🇸","GT":"🇬🇹","GU":"🇬🇺","GW":"🇬🇼","GY":"🇬🇾","HK":"🇭🇰","HM":"🇭🇲","HN":"🇭🇳","HR":"🇭🇷","HT":"🇭🇹","HU":"🇭🇺","ID":"🇮🇩","IE":"🇮🇪","IL":"🇮🇱","IM":"🇮🇲","IN":"🇮🇳","IO":"🇮🇴","IQ":"🇮🇶","IR":"🇮🇷","IS":"🇮🇸","IT":"🇮🇹","JE":"🇯🇪","JM":"🇯🇲","JO":"🇯🇴","JP":"🇯🇵","KE":"🇰🇪","KG":"🇰🇬","KH":"🇰🇭","KI":"🇰🇮","KM":"🇰🇲","KN":"🇰🇳","KP":"🇰🇵","KR":"🇰🇷","KW":"🇰🇼","KY":"🇰🇾","KZ":"🇰🇿","LA":"🇱🇦","LB":"🇱🇧","LC":"🇱🇨","LI":"🇱🇮","LK":"🇱🇰","LR":"🇱🇷","LS":"🇱🇸","LT":"🇱🇹","LU":"🇱🇺","LV":"🇱🇻","LY":"🇱🇾","MA":"🇲🇦","MC":"🇲🇨","MD":"🇲🇩","ME":"🇲🇪","MF":"🇲🇫","MG":"🇲🇬","MH":"🇲🇭","MK":"🇲🇰","ML":"🇲🇱","MM":"🇲🇲","MN":"🇲🇳","MO":"🇲🇴","MP":"🇲🇵","MQ":"🇲🇶","MR":"🇲🇷","MS":"🇲🇸","MT":"🇲🇹","MU":"🇲🇺","MV":"🇲🇻","MW":"🇲🇼","MX":"🇲🇽","MY":"🇲🇾","MZ":"🇲🇿","NA":"🇳🇦","NC":"🇳🇨","NE":"🇳🇪","NF":"🇳🇫","NG":"🇳🇬","NI":"🇳🇮","NL":"🇳🇱","NO":"🇳🇴","NP":"🇳🇵","NR":"🇳🇷","NU":"🇳🇺","NZ":"🇳🇿","OM":"🇴🇲","PA":"🇵🇦","PE":"🇵🇪","PF":"🇵🇫","PG":"🇵🇬","PH":"🇵🇭","PK":"🇵🇰","PL":"🇵🇱","PM":"🇵🇲","PN":"🇵🇳","PR":"🇵🇷","PS":"🇵🇸","PT":"🇵🇹","PW":"🇵🇼","PY":"🇵🇾","QA":"🇶🇦","RE":"🇷🇪","RO":"🇷🇴","RS":"🇷🇸","RU":"🇷🇺","RW":"🇷🇼","SA":"🇸🇦","SB":"🇸🇧","SC":"🇸🇨","SD":"🇸🇩","SE":"🇸🇪","SG":"🇸🇬","SH":"🇸🇭","SI":"🇸🇮","SJ":"🇸🇯","SK":"🇸🇰","SL":"🇸🇱","SM":"🇸🇲","SN":"🇸🇳","SO":"🇸🇴","SR":"🇸🇷","SS":"🇸🇸","ST":"🇸🇹","SV":"🇸🇻","SX":"🇸🇽","SY":"🇸🇾","SZ":"🇸🇿","TC":"🇹🇨","TD":"🇹🇩","TF":"🇹🇫","TG":"🇹🇬","TH":"🇹🇭","TJ":"🇹🇯","TK":"🇹🇰","TL":"🇹🇱","TM":"🇹🇲","TN":"🇹🇳","TO":"🇹🇴","TR":"🇹🇷","TT":"🇹🇹","TV":"🇹🇻","TW":"🇹🇼","TZ":"🇹🇿","UA":"🇺🇦","UG":"🇺🇬","UM":"🇺🇲","US":"🇺🇸","UY":"🇺🇾","UZ":"🇺🇿","VA":"🇻🇦","VC":"🇻🇨","VE":"🇻🇪","VG":"🇻🇬","VI":"🇻🇮","VN":"🇻🇳","VU":"🇻🇺","WF":"🇼🇫","WS":"🇼🇸","XK":"🇽🇰","YE":"🇾🇪","YT":"🇾🇹","ZA":"🇿🇦","ZM":"🇿🇲","ZW":"🇿🇼"};
+
+           
+        var mymap = L.map('map').setView([51.76696254499177, -1.2647357121383023], 6);
+
+        L.tileLayer('http://services.arcgisonline.com/arcgis/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}', {
+            attribution : false, zoomControl: false, draggable: false, interactive: false, subdomains: 'abcd'
+        }).addTo(mymap);
+
+        var getIcon = function(dir, state) {
+            var color = (state && state === 'active' ? '42ba96' : '335eea');
+            var border = '#ffffff';
+            var svg = '<svg id="plane_21" height="640" style="transform:rotate('+(+dir||0)+'deg)" preserveAspectRatio="xMidYMid meet" viewBox="0 0 640 640" width="640" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><path id="a" d="m321.66 609.69c57.26 14.18 89.07 22.05 95.44 23.63 5.72 1.55 11.03-2.07 11.88-6.54.7-1.25.7-1.25.14-3.21-.08-2.51-.71-22.61-.79-25.13.15-3.21-1.66-5.86-4.17-7.26-7.36-5.1-66.25-45.86-73.61-50.96-2.51-1.4-3.62-5.31-3.47-8.52.77-18.5 6.97-166.45 7.75-184.95-.41-5.17 5.6-10.04 10.07-9.19 1.25.7 3.21.14 3.21.14 25.35 11.19 228.21 100.7 253.57 111.89 5.02 2.8 11.58-.12 13.13-5.84.7-1.26 1.4-2.51.85-4.47-.12-4.51-1.06-40.58-1.17-45.09.14-3.21-1.67-5.87-4.18-7.27-26.57-19.93-239.12-179.36-265.68-199.29-2.51-1.4-4.32-4.06-4.18-7.27-.47-46.34-3.27-112.1-4.65-124.39-1.02-48.3-70.31-95.19-79.17 15.07-.59 12.84.96 77.9 3.27 112.1.55 1.96-.85 4.47-3.5 6.28-26.54 20.41-238.81 183.72-265.35 204.13-1.4 2.51-2.8 5.02-2.94 8.23-.01 4.44-.08 39.96-.09 44.4-1.54 5.72 2.78 9.77 9.2 10.06 1.25.7 3.21.15 3.91-1.1 25.43-11.65 228.86-104.85 254.28-116.5 4.62-2.36 10.34-.82 12 5.05.55 1.96.55 1.96 1.11 3.91.7 18.5 6.34 166.48 7.04 184.98-.14 3.21-1.54 5.72-4.9 8.78-7.38 5.27-66.43 47.37-73.81 52.63-2.65 1.81-4.05 4.32-4.2 7.53-.05 2.44-.42 21.98-.46 24.43.4 5.16 4.02 10.47 9.19 10.07 1.25.7 1.95-.56 3.21.14 6.47-1.76 38.83-10.59 97.07-26.47z"/></defs><use fill="#'+color+'" xlink:href="#a" stroke="'+border+'" stroke-width="2%" /><use fill="none" xlink:href="#a"/></svg>';
+            return L.icon({
+                iconUrl : 'data:image/svg+xml;base64,' + btoa(svg),
+                iconSize : [20, 20, dir],
+                iconAnchor : [10, 10, dir]
+            });
+        };
+
+        var planes = {}; // plane id -> plane object
+        var delay_timeout = null;
+        var repeat_timeout = null;
+        var get_flights = function () {
+            
+            clearTimeout(delay_timeout);
+            delay_timeout = setTimeout(function() {
+
+                var bounds = mymap.getBounds();
+                var sW = bounds._southWest;
+                var nE = bounds._northEast;
+                var bbox = [sW.lat, sW.lng, nE.lat, nE.lng].join(',');
+
+
+                //console.log("ici");
+               
+               
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.open("GET", "http://impossibly.fr:1026/v2/entities?type=LiveFlight", false); 
+                xmlHttp.send(null);
+                let result = xmlHttp.response;
+                if (xmlHttp.status === 200) {
+                    result = JSON.parse(result);
+                    planes = (result||[]).reduce(function (all, one) {
+                            all[one.hex] = one;
+                            return all;
+                        }, {});
+                }
+                //console.log(planes);
+                //redraw_planes();
+                clearTimeout(repeat_timeout);
+                repeat_timeout = setTimeout(get_flights, 3333);
+                if(xmlHttp.status===404){
+                    alert("API key is not valid");
+                    clearTimeout(repeat_timeout);
+                    repeat_timeout = setTimeout(get_flights, 7777);
+                }
+            }, 333);
+        }; 
+            planes=get_flights();
+           
+            console.log(planes);
+            
+            var markers = {};
+            var play_interval = null;
+            // var redraw_planes = function () {
+            //     clearInterval(play_interval);
+
+            //     for(let hex in markers) {
+            //         if(!planes[hex]) {
+            //             mymap.removeLayer(markers[hex]);
+            //             delete markers[hex];
+            //         }
+            //     }
+
+            //     for(let hex in planes) {
+            //         if(!planes.hasOwnProperty(hex)) continue;
+
+            //         // var label = "";
+            //         // if(planes[hex].dep_icao || planes[hex].dep_iata) {
+            //         //     label += (planes[hex].dep_icao||"") + " / " + (planes[hex].dep_iata||"");
+            //         // }
+            //         // if(planes[hex].arr_icao || planes[hex].arr_iata) {
+            //         //     label += " &gt; " + (planes[hex].arr_icao||"") + " / " + (planes[hex].arr_iata||"");
+            //         // }
+            //         // label += "<br/> ";
+            //         // if(planes[hex].flag && window.flags[planes[hex].flag]) {
+            //         //     label += window.flags[planes[hex].flag];
+            //         // }
+
+            //         // if(planes[hex].airline_icao || planes[hex].airline_iata) {
+            //         //     label += (planes[hex].airline_icao||"") + " / " + (planes[hex].airline_iata||"");
+            //         // }
+
+            //         // if(planes[hex].hex) {
+            //         //     label += "<br/> Hex: " + planes[hex].hex + " &nbsp; ";
+            //         // }
+
+            //         // if(planes[hex].reg_number) {
+            //         //     label += "<br/> Reg: "+planes[hex].reg_number;
+            //         // }
+
+            //         // if(planes[hex].flight_icao || planes[hex].flight_iata) {
+            //         //     label += "<br/> Flight: "+(planes[hex].flight_icao||"")+' / '+(planes[hex].flight_iata||"");
+            //         // }
+
+            //         // if(planes[hex].speed) {
+            //         //     label += "<br/> Speed: "+planes[hex].speed+" kph &nbsp; ";
+            //         // }
+            //         // if(planes[hex].alt) {
+            //         //     label += "<br/> Alt: "+planes[hex].alt+" m";
+            //         // }
+            //         // if(planes[hex].aircraft_icao) {
+            //         //     label += "<br/> Aircraft: "+planes[hex].aircraft_icao;
+            //         // }
+            //         // if(planes[hex].lat && planes[hex].lng) {
+            //         //     label += "<br/> GEO: "+planes[hex].lat+","+planes[hex].lng;
+            //         // }
+            //         // if(planes[hex].dir) {
+            //         //     label += "<br/> Direction: "+planes[hex].dir+"°";
+            //         // }
+
+            //         if(!markers[hex]) {
+            //             markers[hex] = L.marker(
+            //                 [planes[hex].lat, planes[hex].lng],
+            //                 {icon: getIcon(planes[hex].dir)}
+            //             );
+            //             markers[hex].bindPopup(label);
+            //             markers[hex].on('mouseover', function (e) {
+            //                 this.setIcon(getIcon(this.options.icon.options.iconSize[2], 'active'));
+            //             });
+            //             markers[hex].on('mouseout', function (e) {
+            //                 this.setIcon(getIcon(this.options.icon.options.iconSize[2]));
+            //             });
+            //             markers[hex].on('click', function (e) {
+            //                 this.openPopup();
+            //                 setTimeout(function () {
+            //                     this.closePopup();
+            //                 }.bind(this), 10000);
+            //             });
+            //             markers[hex].addTo(mymap);
+            //         }
+            //         else {
+            //             markers[hex].setLatLng([planes[hex].lat, planes[hex].lng]);
+            //             markers[hex].setIcon(getIcon(planes[hex].dir));
+            //             markers[hex].bindPopup(label);
+            //         }
+            //     }
+
+            //     play_interval = setInterval(function () {
+            //         //
+            //     }, 555);
+            // };
+            
+       
+
+
+
+    var win = navigator.platform.indexOf('Win') > -1;
+    if (win && document.querySelector('#sidenav-scrollbar')) {
+      var options = {
+        damping: '0.5'
+      }
+      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+    }
+  </script>
+
+  <!-- Github buttons -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="/static/assets/js/soft-ui-dashboard.min.js?v=1.0.3"></script>
+
+</body>
+</html>
