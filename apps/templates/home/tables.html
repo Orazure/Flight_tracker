@@ -1,0 +1,32 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Tables {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+  <div class="container-fluid py-4">
+    <div class="row">
+      <div class="col-12">
+        <div id="map" >
+        <!-- div with table map -->
+        </div>
+      </div>
+    </div>
+  </div>
+<style>
+  #map { height: 600px; }
+
+</style>
+    
+
+    {% include "includes/footer.html" %}
+
+
+{% endblock content %}
+
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}{% endblock javascripts %}
