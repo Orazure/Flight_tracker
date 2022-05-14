@@ -6,13 +6,14 @@ from flask_login import login_required
 from jinja2 import TemplateNotFound
 
 from apps.DAL.flights import FlightDAL
+from apps.DAL.live_flight import LiveFlightDAL
 from apps.configuration import SUPPORTED_FLIGHTS, SUPPORTED_AIRPORTS
 
 @blueprint.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
     dal = FlightDAL()
-    listeData=[]
+    flights = LiveFlightDAL()
     if request.method == 'POST':
         pippo =  request.form.to_dict()
         print(pippo['data'])
@@ -24,16 +25,12 @@ def index():
                 #remove [] in dep_iata
                 dep_iata=dep_iata[0]
                 dep_iata=str(dep_iata)
-                print(dep_iata)
                 arr_iata=[d['arr_iata'] for d in test]
                 arr_iata=arr_iata[0]
                 arr_iata=str(arr_iata)
-                print(arr_iata)
-            
-                test=dal.get_flights_from_iata(str(dep_iata),str(arr_iata))
-                print(dal.get_flights_from_iata('CDG', 'JFK'))
-                print(test)
-        # dal.get_flights_from_iata()
+                flightsData=flights.get_flights_from_iata_dest(str(dep_iata),str(arr_iata))
+                
+    # dal.get_flights_from_iata()
     # Extract the current page name
     segment = get_segment(request)
     
