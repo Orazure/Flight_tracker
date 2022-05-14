@@ -26,12 +26,12 @@ class LiveFlightDAL:
 
         Example:
             >>> dal = FlightDAL()
-            >>> dal.get_flights_from_iata('LHR', 'CDG')
-            [{'id': 'Flight_1', 'dep_iata': 'LHR', 'arr_iata': 'CDG', 'location':...}...]
+            >>> dal.get_flights_from_iata('CDG', 'JFK')
+            [{'id': 'LiveFlight-1', 'departure': 'CDG', 'arrival': 'JFK', 'location':...}...]
         """
         params = {
             "type": "LiveFlight",
-            "q": f"dep_iata=={dep_iata} AND arr_iata=={arr_iata}",
+            "q": f"departure=={dep_iata};arrival=={arr_iata}",
         }
         return requests.get(f"{self.orion_url}", params=params).json()
 
