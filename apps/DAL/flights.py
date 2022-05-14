@@ -1,9 +1,10 @@
-from configuration import ORION_URL
+from xml.dom.minidom import Entity
+from apps.configuration import ORION_URL
 from typing import List
 import requests
 
 
-class FlightDAL:
+class FlightDAL(Entity):
     """Flight Data Access Layer."""
 
     def __init__(self):
@@ -43,6 +44,7 @@ class FlightDAL:
         """
         params = {
             "type": "Flight",
-            "q": f"dep_iata=={dep_iata} AND arr_iata=={arr_iata}",
+            "q": f"dep_iata=={dep_iata} ; arr_iata=={arr_iata}",
         }
+        print(f"{self.orion_url}", params)
         return requests.get(f"{self.orion_url}", params=params).json()

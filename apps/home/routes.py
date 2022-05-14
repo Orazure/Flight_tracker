@@ -4,15 +4,36 @@ from apps.home import blueprint
 from flask import render_template, request
 from flask_login import login_required
 from jinja2 import TemplateNotFound
-from DAL import FlightDAL as fdal
 
+from apps.DAL.flights import FlightDAL
+from apps.configuration import SUPPORTED_FLIGHTS, SUPPORTED_AIRPORTS
 
 @blueprint.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
+    dal = FlightDAL()
+    listeData=[]
     if request.method == 'POST':
         pippo =  request.form.to_dict()
-        print(pippo)
+        print(pippo['data'])
+        # si la donnée dans data correspond à ceux dans SUPPORTED_FLIGHTS alors je retourne la valeur de la clé
+        for a in pippo['data']:
+            if a.isdigit():
+                test=SUPPORTED_FLIGHTS[int(a)].values()
+                dep_iata=[d['dep_iata'] for d in test]
+                #remove [] in dep_iata
+                dep_iata=dep_iata[0]
+                dep_iata=str(dep_iata)
+                print(dep_iata)
+                arr_iata=[d['arr_iata'] for d in test]
+                arr_iata=arr_iata[0]
+                arr_iata=str(arr_iata)
+                print(arr_iata)
+            
+                test=dal.get_flights_from_iata(str(dep_iata),str(arr_iata))
+                print(dal.get_flights_from_iata('CDG', 'JFK'))
+                print(test)
+        # dal.get_flights_from_iata()
     # Extract the current page name
     segment = get_segment(request)
     
