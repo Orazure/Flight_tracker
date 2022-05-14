@@ -1,18 +1,21 @@
 # -*- encoding: utf-8 -*-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
 
 from apps.home import blueprint
 from flask import render_template, request
 from flask_login import login_required
 from jinja2 import TemplateNotFound
+from DAL import FlightDAL as fdal
 
 
-@blueprint.route('/index')
+@blueprint.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
-
+    if request.method == 'POST':
+        pippo =  request.form.to_dict()
+        print(pippo)
+    # Extract the current page name
+    segment = get_segment(request)
+    
     return render_template('home/index.html', segment='index')
 
 
@@ -37,6 +40,11 @@ def route_template(template):
     except:
         return render_template('home/page-500.html'), 500
 
+# @blueprint.route('/search/data')
+# @login_required
+# def dataFlight():
+
+#     return render_template('home/index.html', segment='index')
 
 # Helper - Extract current page name from request
 def get_segment(request):
