@@ -1,9 +1,10 @@
 # -*- encoding: utf-8 -*-
 
 from apps.home import blueprint
-from flask import render_template, request
+from flask import render_template, request,jsonify
 from flask_login import login_required
 from jinja2 import TemplateNotFound
+import json
 
 from apps.DAL.flights import FlightDAL
 from apps.DAL.live_flight import LiveFlightDAL
@@ -14,6 +15,7 @@ from apps.configuration import SUPPORTED_FLIGHTS, SUPPORTED_AIRPORTS
 def index():
     dal = FlightDAL()
     flights = LiveFlightDAL()
+    data=[]
     if request.method == 'POST':
         pippo =  request.form.to_dict()
         print(pippo['data'])
@@ -22,13 +24,13 @@ def index():
             if a.isdigit():
                 test=SUPPORTED_FLIGHTS[int(a)].values()
                 dep_iata=[d['dep_iata'] for d in test]
-                #remove [] in dep_iata
                 dep_iata=dep_iata[0]
-                dep_iata=str(dep_iata)
                 arr_iata=[d['arr_iata'] for d in test]
                 arr_iata=arr_iata[0]
-                arr_iata=str(arr_iata)
-                flightsData=flights.get_flights_from_iata_dest(str(dep_iata),str(arr_iata))
+                flightsData=dal.get_flights_from_icao(str(dep_iata),str(arr_iata))
+                print(flightsData)
+                data.append(flightsData)
+        return jsonify(data)
                 
     # dal.get_flights_from_iata()
     # Extract the current page name
