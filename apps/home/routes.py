@@ -18,17 +18,15 @@ def index():
     data=[]
     if request.method == 'POST':
         pippo =  request.form.to_dict()
-        print(pippo['data'])
         # si la donnée dans data correspond à ceux dans SUPPORTED_FLIGHTS alors je retourne la valeur de la clé
         for a in pippo['data']:
             if a.isdigit():
                 test=SUPPORTED_FLIGHTS[int(a)].values()
-                dep_iata=[d['dep_iata'] for d in test]
+                dep_iata=[d['dep_icao'] for d in test]
                 dep_iata=dep_iata[0]
-                arr_iata=[d['arr_iata'] for d in test]
+                arr_iata=[d['arr_icao'] for d in test]
                 arr_iata=arr_iata[0]
                 flightsData=dal.get_flights_from_icao(str(dep_iata),str(arr_iata))
-                print(flightsData)
                 data.append(flightsData)
         return jsonify(data)
                 
