@@ -31,7 +31,7 @@ class FlightDAL:
         self,
         dep_icao: str,
         arr_icao: str,
-        dateDeparture: datetime = datetime.now().isoformat(),
+        dateDeparture: datetime = datetime.now(),
     ) -> List[dict]:
         """Get flight from departure and arrival ICAO codes.
 
@@ -50,6 +50,6 @@ class FlightDAL:
         """
         params = {
             "type": "Flight",
-            "q": f"departsFromAirport==airport-{dep_icao};arrivesToAirport==airport-{arr_icao};dateDeparture>{dateDeparture}",
+            "q": f"departsFromAirport==airport-{dep_icao};arrivesToAirport==airport-{arr_icao};dateDeparture>{dateDeparture.isoformat()}",
         }
         return requests.get(f"{self.orion_url}", params=params).json()
