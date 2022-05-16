@@ -2,8 +2,8 @@ import requests
 from time import time
 from typing import List
 from loguru import logger
-from configuration import ORION_URL, API_KEY, AIRLABS_URL, SUPPORTED_AIRPORTS
-from airlabs.utility import replace_illegal_characters
+from apps.configuration import ORION_URL, API_KEY, AIRLABS_URL, SUPPORTED_AIRPORTS
+from apps.airlabs.utility import replace_illegal_characters
 
 
 def get_all_airports() -> List[dict]:

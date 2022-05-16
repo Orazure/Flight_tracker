@@ -1,12 +1,13 @@
 version: '3.8'
 services:
-  appseed-app:
-    container_name: appseed_app
+  ui-ft:
+    container_name: flight_tracker_ui
     restart: always
     env_file: .env
     build: .
+    volumes:
+      - ./apps:/apps
     networks:
-      - db_network
       - web_network
   nginx:
     container_name: nginx
@@ -18,11 +19,48 @@ services:
       - ./nginx:/etc/nginx/conf.d
     networks:
       - web_network
-    depends_on: 
-      - appseed-app
+    depends_on:
+      - ui-ft
+  mongo:
+    image: mongo:4.4
+    command: --nojournal
+    volumes:
+      - ./db:/data/db/
+  orion:
+    image: fiware/orion
+    links:
+      - mongo
+    ports:
+      - "1026:1026"
+    command: -dbhost mongo -corsOrigin __ALL -corsMaxAge 600
+    depends_on:
+      - mongo
+  draco:
+    image: ging/fiware-draco
+    ports:
+      - "8080:8080"
+      - "5050:5050"
+      - "9090:9090"
+    environment:
+      - SINGLE_USER_CREDENTIALS_USERNAME=admin
+      - SINGLE_USER_CREDENTIALS_PASSWORD=pass1234567890
+      - NIFI_WEB_HTTP_PORT=8080
+    depends_on:
+      - orion
+  mysql:
+    image: mysql:5.7.22
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password --ssl=0
+    environment:
+      - MYSQL_DATABASE=draco-db
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_ROOT_HOST=%
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./draco-db:/var/lib/mysql
 networks:
-  db_network:
-    driver: bridge
   web_network:
     driver: bridge
- 
