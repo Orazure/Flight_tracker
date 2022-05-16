@@ -14,13 +14,11 @@
           <div class="card z-index-5">
             <div class="card-body p-3">
                 <h6 class="mb">Choose your flight</h6>
-                <div>
-                <input type="radio" id="louis2" name="test" value="Date">
-                <label class="form-radio-label" for="louis2">from Bucarest to Palermo</label>
-              </div>
-              <div>
-                <input type="radio" id="louis1" name="test value="notDate">
-                <label class="form-radio-label" for="louis1">from Bucarest to Palermo</label>
+              <div id="radioId">
+                <input type="radio" id="DATE" name="test" value="date">
+                <label class="form-radio-label" for="date">With Date</label>
+                <input type="radio" id="NOTDATE" name="test" value="notDate">
+                <label class="form-radio-label" for="notDate">Without Date</label>
               </div>
                 <div class="card-body p-1" id="Flight">
                 <ul class="list-group">
@@ -61,12 +59,13 @@
           </div>
         </div>
         <div class="col-xl-7">
-          <div class="col-md-2">
-            <div class="card h-100">
+          <div class="col-md-3">
+            <div class="card h-100" id="Hours" style="display: none;">
               <div class="card-body p-3">
-                  <h6 class="mb">Choose your hours</h6>
+                  <h6 class="mb">Choose your hours </h6>
                 <div class="card-body p-1" id="Flight">
-                 
+                 <!-- <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Indicate a hours"> -->
+                 <input id="appt-time" type="time" name="appt-time" value="13:30">
                 </div>
                 </div>
               </div>
@@ -229,6 +228,82 @@
     var option3=document.getElementById('flightOption3');
     var option4=document.getElementById('flightOption4');
     
+    let startTime = document.getElementById("appt-time");
+    //event click function for option1
+    document.getElementById("radioId").onclick = function(){
+      var radios = document.getElementsByName("test");
+      let check="";
+      for (var i = 0; i < radios.length; i++) {
+        if (radios[i].checked) {
+          check=radios[i].value;
+        }
+      }
+      if(check=="date"){
+        Hours.style.display="block";
+        //block onchange function Flight 
+        Flight.onchange=function(){};
+        Flight.onchange = function() {
+        var values = [].filter.call(document.getElementsByName('flight[]'), (c) => c.checked).map(c => c.value);
+        console.log(startTime.value);
+        var ajaxData = new ajax({
+          method: 'POST',
+          url: '/index',
+          data: {
+              data: values,
+              heure:String(startTime.value).split(":")[0],
+              minute:String(startTime.value).split(":")[1]
+          },
+          response: 'json',
+          setRequestHeader: {
+              'X-Requested-With': 'XMLHttpRequest',
+              'X-Token': 'HAHA'
+          },
+          success: function (data) {
+              console.log(data);
+              if (data.length === 0)
+              {
+                Refresh();
+              }
+              let clone = document.importNode(templateTableLine.content, true);
+              let tds = clone.querySelectorAll('td');
+              data.forEach(function(TEST){
+                TEST.forEach(function(DATAS){
+                var ps = new Date(DATAS.dateETOT.value);
+                ps = ps.toDateString() + " " + ps.getHours() + ":"+ ps.getMinutes() + " hrs"; 
+                tds[0].innerText = ps;
+                var ps = new Date(DATAS.dateSLDT.value);
+                ps = ps.toDateString() + " " + ps.getHours() + ":"+ ps.getMinutes() + " hrs"; 
+                tds[1].innerText = ps;
+                DATAS.delayed.value == 'null' ?  tds[2].delayed.value ='En retard' : tds[2].innerText = DATAS.delayed.value;
+                tds[3].innerText = DATAS.flightNumber.value;
+                tds[4].innerText = DATAS.flightNumberIATA.value;
+              // tds[5].innerText = DATAS.product_dateCreation;
+                tds[5].innerText = DATAS.dateDeparture.value;
+                tds[6].innerText = DATAS.dateArrival.value;
+                tds[7].innerText = Math.round(DATAS.duration.value/60);
+                referenceTab.querySelector('tbody').appendChild(clone.cloneNode(true));
+                })
+                
+              });
+          },
+          error: function(status, data) {
+              console.log(data);
+          }
+        });
+      }
+
+
+
+      }
+      else{
+        Hours.style.display="none";
+      }
+    }
+    
+
+
+
+    
     
     //return the value of the checked radio button
     Flight.onchange = function() {
@@ -278,8 +353,9 @@
       error: function(status, data) {
           console.log(data);
       }
-  });
-}
+    });
+  }
+
 const Refresh = () => {
 		document.location.reload();
 	}

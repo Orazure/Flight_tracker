@@ -2,6 +2,7 @@ from datetime import datetime
 from configuration import ORION_URL
 from typing import List
 import requests
+from datetime import datetime
 
 
 class FlightDAL:
@@ -31,15 +32,14 @@ class FlightDAL:
         self,
         dep_icao: str,
         arr_icao: str,
-        dateDeparture: datetime = datetime.now().isoformat(),
+        dateDeparture: datetime = datetime.now(),
     ) -> List[dict]:
         """Get flight from departure and arrival ICAO codes.
 
         Args:
             dep_icao (str): ICAO code of the departure airport.
             arr_icao (str): ICAO code of the arrival airport.
-            dateDeparture (datetime, optional): Date of the departure. Defaults to datetime.now().isoformat().
-
+            dateDeparture (datetime, optional): Date of the departure. Defaults to datetime.now().
         Returns:
             List[dict]: The flights.
 
@@ -50,6 +50,6 @@ class FlightDAL:
         """
         params = {
             "type": "Flight",
-            "q": f"departsFromAirport==airport-{dep_icao};arrivesToAirport==airport-{arr_icao};dateDeparture>{dateDeparture}",
+            "q": f"departsFromAirport==airport-{dep_icao};arrivesToAirport==airport-{arr_icao};dateDeparture>{dateDeparture.isoformat()}",
         }
         return requests.get(f"{self.orion_url}", params=params).json()
