@@ -2,6 +2,7 @@ from xml.dom.minidom import Entity
 from apps.configuration import ORION_URL
 from typing import List
 import requests
+from datetime import datetime
 
 
 class FlightDAL:
@@ -27,11 +28,17 @@ class FlightDAL:
         params = {"type": "Flight"}
         return requests.get(f"{self.orion_url}/{flight_id}", params=params).json()
 
-    def get_flights_from_icao(self, dep_icao: str, arr_icao: str) -> List[dict]:
+    def get_flights_from_icao(
+        self,
+        dep_icao: str,
+        arr_icao: str,
+        dateDeparture: datetime = datetime.now(),
+    ) -> List[dict]:
         """Get flight from departure and arrival ICAO codes.
         Args:
             dep_icao (str): ICAO code of the departure airport.
             arr_icao (str): ICAO code of the arrival airport.
+            dateDeparture (datetime, optional): Date of the departure. Defaults to datetime.now().isoformat().
         Returns:
             List[dict]: The flights.
         Example:
@@ -41,7 +48,6 @@ class FlightDAL:
         """
         params = {
             "type": "Flight",
-            "q": f"departsFromAirport==airport-{dep_icao};arrivesToAirport==airport-{arr_icao}",
+            "q": f"departsFromAirport==airport-{dep_icao};arrivesToAirport==airport-{arr_icao};dateDeparture>{dateDeparture.isoformat()}",
         }
-        print(f"{self.orion_url}", params)
         return requests.get(f"{self.orion_url}", params=params).json()

@@ -5,6 +5,7 @@ from flask import render_template, request,jsonify
 from flask_login import login_required
 from jinja2 import TemplateNotFound
 import json
+from datetime import datetime
 
 from apps.DAL.flights import FlightDAL
 from apps.DAL.live_flight import LiveFlightDAL
@@ -26,7 +27,16 @@ def index():
                 dep_iata=dep_iata[0]
                 arr_iata=[d['arr_icao'] for d in test]
                 arr_iata=arr_iata[0]
-                flightsData=dal.get_flights_from_icao(str(dep_iata),str(arr_iata))
+                if pippo.get('heure'):
+                    filter_date = datetime.now()
+
+                    filter_date=filter_date.replace(hour=int(pippo['heure']),minute=int(pippo['minute']))
+                    
+                    print(filter_date)
+                    flightsData = dal.get_flights_from_icao(str(dep_iata), str(arr_iata), filter_date)
+                else:
+                    flightsData = dal.get_flights_from_icao(str(dep_iata), str(arr_iata))
+                # print(flightsData)
                 data.append(flightsData)
         return jsonify(data)
                 
