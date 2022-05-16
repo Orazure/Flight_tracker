@@ -1,5 +1,5 @@
-from xml.dom.minidom import Entity
-from apps.configuration import ORION_URL
+from datetime import datetime
+from configuration import ORION_URL
 from typing import List
 import requests
 from datetime import datetime
@@ -35,12 +35,14 @@ class FlightDAL:
         dateDeparture: datetime = datetime.now(),
     ) -> List[dict]:
         """Get flight from departure and arrival ICAO codes.
+
         Args:
             dep_icao (str): ICAO code of the departure airport.
             arr_icao (str): ICAO code of the arrival airport.
-            dateDeparture (datetime, optional): Date of the departure. Defaults to datetime.now().isoformat().
+            dateDeparture (datetime, optional): Date of the departure. Defaults to datetime.now().
         Returns:
             List[dict]: The flights.
+
         Example:
             >>> dal = FlightDAL()
             >>> dal.get_flights_from_icao('LFPG', 'KJFK')

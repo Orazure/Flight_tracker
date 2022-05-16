@@ -1,4 +1,4 @@
-from apps.configuration import ORION_URL
+from configuration import ORION_URL
 from typing import List
 import requests
 
@@ -67,4 +67,26 @@ class LiveFlightDAL:
             {'id': 'Flight_1', 'flightNumberIATA': 'LHR'...}
         """
         params = {"type": "LiveFlight", "q": f"flightNumber=={flight_number}"}
+        return requests.get(f"{self.orion_url}", params=params).json()
+
+    def get_flight_from_icao_number(self, dep_icao: str, arr_icao: str):
+        """Get flight from departure and arrival ICAO codes.
+
+        Args:
+            dep_icao (str): ICAO code of the departure airport.
+            arr_icao (str): ICAO code of the arrival airport.
+
+        Returns:
+            dict: The flight.
+
+        Example:
+            >>> dal = FlightDAL()
+            >>> dal.get_flight_from_icao('LFPG', 'KJFK')
+            {'id': 'Flight_1', 'flightNumberIATA': 'LHR'...}
+
+        """
+        params = {
+            "type": "LiveFlight",
+            "q": f"departure=={dep_icao};arrival=={arr_icao}",
+        }
         return requests.get(f"{self.orion_url}", params=params).json()
