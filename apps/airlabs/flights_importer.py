@@ -3,11 +3,6 @@ from apps.configuration import API_KEY, AIRLABS_URL, ORION_URL, SUPPORTED_FLIGHT
 from apps.airlabs.utility import format_datetime
 from loguru import logger
 import requests
-import json
-
-# read json file
-with open("example\schedule-CDG-JFK.json", "r") as f:
-    flights = json.load(f)
 
 
 def get_all_flights(dep_iata_code: str, arr_iata_code: str) -> list:
@@ -107,10 +102,6 @@ def get_all_flights(dep_iata_code: str, arr_iata_code: str) -> list:
                 "type": "Integer",
                 "value": flight.get("duration", 0),
                 "metadata": {"unit": {"type": "Text", "value": "minutes"}},
-            },
-            "country": {
-                "type": "Text",
-                "value": flight.get("flag"),
             },
             "airline_iata": {
                 "type": "Text",
