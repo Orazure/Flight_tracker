@@ -1,5 +1,5 @@
-from configuration import API_KEY, AIRLABS_URL, ORION_URL, SUPPORTED_FLIGHTS
-from airlabs.utility import replace_illegal_characters
+from apps.configuration import API_KEY, AIRLABS_URL, ORION_URL, SUPPORTED_FLIGHTS
+from apps.airlabs.utility import replace_illegal_characters
 from loguru import logger
 from typing import List
 import requests

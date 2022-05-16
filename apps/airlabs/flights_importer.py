@@ -1,6 +1,6 @@
 from datetime import datetime
-from configuration import API_KEY, AIRLABS_URL, ORION_URL, SUPPORTED_FLIGHTS
-from airlabs.utility import format_datetime
+from apps.configuration import API_KEY, AIRLABS_URL, ORION_URL, SUPPORTED_FLIGHTS
+from apps.airlabs.utility import format_datetime
 from loguru import logger
 import requests
 import json
