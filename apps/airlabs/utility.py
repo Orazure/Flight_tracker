@@ -16,7 +16,7 @@ def format_datetime(dt: str) -> str:
         '2020-01-01T00:00:00'
     """
     if dt is None:
-        logger.warning("No datetime found.")
+        logger.debug("No datetime found.")
         return "1970-01-01T01:00:00"
     return datetime.strptime(dt, "%Y-%m-%d %H:%M").isoformat()
 
