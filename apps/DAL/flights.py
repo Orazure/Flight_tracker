@@ -1,5 +1,5 @@
 from datetime import datetime
-from configuration import ORION_URL
+from apps.configuration import ORION_URL
 from typing import List
 import requests
 from datetime import datetime
