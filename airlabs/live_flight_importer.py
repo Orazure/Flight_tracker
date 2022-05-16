@@ -1,3 +1,4 @@
+from datetime import datetime
 from configuration import API_KEY, AIRLABS_URL, ORION_URL, SUPPORTED_FLIGHTS
 from airlabs.utility import format_datetime
 from loguru import logger
@@ -44,8 +45,8 @@ def get_all_flights(dep_iata_code: str, arr_iata_code: str) -> list:
                 "value": flight.get("alt"),
                 "metadata": {"unit": {"type": "Text", "value": "meters"}},
             },
-            "departure": {"type": "Text", "value": flight.get("dep_iata")},
-            "arrival": {"type": "Text", "value": flight.get("arr_iata")},
+            "departure": {"type": "Text", "value": flight.get("dep_icao")},
+            "arrival": {"type": "Text", "value": flight.get("arr_icao")},
             "aircraft_icao": {"type": "Text", "value": flight.get("aircraft_icao")},
             "aircraft_iata": {"type": "Text", "value": flight.get("aircraft_iata")},
             "airline_iata": {"type": "Text", "value": flight.get("airline_iata")},
@@ -53,6 +54,14 @@ def get_all_flights(dep_iata_code: str, arr_iata_code: str) -> list:
                 "type": "Number",
                 "value": flight.get("dir"),
                 "metadata": {"unit": {"type": "Text", "value": "degrees"}},
+            },
+            "country": {
+                "type": "Text",
+                "value": flight.get("flag"),
+            },
+            "last_update": {
+                "type": "DateTime",
+                "value": f"{datetime.now().isoformat()}Z",
             },
         }
         to_import.append(_)
@@ -79,9 +88,11 @@ def import_flights(flights: List[dict]) -> None:
 
 def update_live_flights() -> None:
     """Update live flights in ORION."""
-    for flight in SUPPORTED_FLIGHTS:
-        logger.info(f"Updating live flights {flight.get('description')}")
+
+    for i, flight in enumerate(SUPPORTED_FLIGHTS):
+        temp = flight.get(str(i))
+        logger.info(f"Updating live flights {temp.get('description')}")
         flights = get_all_flights(
-            dep_iata_code=flight.get("dep_iata"), arr_iata_code=flight.get("arr_iata")
+            dep_iata_code=temp.get("dep_iata"), arr_iata_code=temp.get("arr_iata")
         )
         import_flights(flights)

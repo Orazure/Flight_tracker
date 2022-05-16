@@ -1,3 +1,4 @@
+from datetime import datetime
 from configuration import API_KEY, AIRLABS_URL, ORION_URL, SUPPORTED_FLIGHTS
 from airlabs.utility import format_datetime
 from loguru import logger
@@ -17,7 +18,7 @@ def get_all_flights(dep_iata_code: str, arr_iata_code: str) -> list:
         arr_iata_code (str): Arrival airport IATA code.
 
     Returns:
-        list: List of all flights from the country following Flight Datamodel.
+        list: List of all flights following Flight Datamodel.
     """
     to_import = []
     params = {"api_key": API_KEY, "dep_iata": dep_iata_code, "arr_iata": arr_iata_code}
@@ -107,6 +108,22 @@ def get_all_flights(dep_iata_code: str, arr_iata_code: str) -> list:
                 "value": flight.get("duration", 0),
                 "metadata": {"unit": {"type": "Text", "value": "minutes"}},
             },
+            "country": {
+                "type": "Text",
+                "value": flight.get("flag"),
+            },
+            "airline_iata": {
+                "type": "Text",
+                "value": f"{flight.get('airline_iata')}",
+            },
+            "airline_icao": {
+                "type": "Text",
+                "value": f"{flight.get('airline_icao')}",
+            },
+            "last_update": {
+                "type": "DateTime",
+                "value": f"{datetime.now().isoformat()}Z",
+            },
         }
         to_import.append(_)
     return to_import
@@ -137,7 +154,8 @@ def import_flights(flights: list) -> bool:
 
 def update_flights_information() -> None:
     """Update data in orion with the supported flights"""
-    for flight in SUPPORTED_FLIGHTS:
-        logger.info(f"Updating flights {flight.get('description')}")
-        flights = get_all_flights(flight.get("dep_iata"), flight.get("arr_iata"))
+    for i, flight in enumerate(SUPPORTED_FLIGHTS):
+        temp = flight.get(str(i))
+        logger.info(f"Updating flights {temp.get('description')}")
+        flights = get_all_flights(temp.get("dep_iata"), temp.get("arr_iata"))
         import_flights(flights)
