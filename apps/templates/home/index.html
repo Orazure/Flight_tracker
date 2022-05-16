@@ -7,13 +7,22 @@
 
 {% block content %}
 
-    <div class="container-fluid py-2">
-      <div class="row mt-1">
-        <div class="col-lg-4 mb-lg-0 mb-0">
+    <div class="container-fluid py-4">
+      <div class="row">
+        <div class="col-lg-4">
+        <div class="mb-lg-0 mb-0">
           <div class="card z-index-5">
             <div class="card-body p-3">
                 <h6 class="mb">Choose your flight</h6>
-              <div class="card-body p-1" id="Flight">
+                <div>
+                <input type="radio" id="louis2" name="test" value="Date">
+                <label class="form-radio-label" for="louis2">from Bucarest to Palermo</label>
+              </div>
+              <div>
+                <input type="radio" id="louis1" name="test value="notDate">
+                <label class="form-radio-label" for="louis1">from Bucarest to Palermo</label>
+              </div>
+                <div class="card-body p-1" id="Flight">
                 <ul class="list-group">
                   <li class="list-group-item border-0 px-0">
                     <div class="form-check form-switch ps-0">
@@ -45,20 +54,29 @@
                       <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="flightOption4">from Bucarest to Palermo</label>
                     </div>
                   </li>
-                  <li class="list-group-item border-0 px-0">
-                    <div class="form-check form-switch ps-0">
-                      <input class="form-check-input ms-auto" type="checkbox" id="flightOption4"name="flight[]" value="5">
-                      <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="flightOption4">from KJFK to AFR</label>
-                    </div>
-                  </li>
                 </ul>
               </div>
               </div>
             </div>
           </div>
         </div>
-        
+        <div class="col-xl-7">
+          <div class="col-md-2">
+            <div class="card h-100">
+              <div class="card-body p-3">
+                  <h6 class="mb">Choose your hours</h6>
+                <div class="card-body p-1" id="Flight">
+                 
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+      </div>
+      
+     
       
       <div class="row my-4">
         <div class="col-lg-8 col-md-6 mb-md-0 mb-4">
@@ -95,7 +113,7 @@
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Hours arrivée</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">retard</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">code number of flight</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">code planes</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name of flight</th>
                       <!-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">airline</th> -->
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">date de depart</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">date d'arrivée</th>
@@ -239,16 +257,19 @@
           let tds = clone.querySelectorAll('td');
           data.forEach(function(TEST){
             TEST.forEach(function(DATAS){
-              console.log(DATAS.dateETOT.value);
-              tds[0].innerText = DATAS.dateETOT.value;
-            tds[1].innerText = DATAS.dateSLDT.value;
+            var ps = new Date(DATAS.dateETOT.value);
+            ps = ps.toDateString() + " " + ps.getHours() + ":"+ ps.getMinutes() + " hrs"; 
+            tds[0].innerText = ps;
+            var ps = new Date(DATAS.dateSLDT.value);
+            ps = ps.toDateString() + " " + ps.getHours() + ":"+ ps.getMinutes() + " hrs"; 
+            tds[1].innerText = ps;
             DATAS.delayed.value == 'null' ?  tds[2].delayed.value ='En retard' : tds[2].innerText = DATAS.delayed.value;
             tds[3].innerText = DATAS.flightNumber.value;
-            tds[4].innerText = DATAS.flightType.value;
+            tds[4].innerText = DATAS.flightNumberIATA.value;
            // tds[5].innerText = DATAS.product_dateCreation;
-            tds[5].innerText = DATAS.dateArrival.value;
-            tds[6].innerText = DATAS.dateDeparture.value;
-            tds[7].innerText = DATAS.duration.value;
+            tds[5].innerText = DATAS.dateDeparture.value;
+            tds[6].innerText = DATAS.dateArrival.value;
+            tds[7].innerText = Math.round(DATAS.duration.value/60);
             referenceTab.querySelector('tbody').appendChild(clone.cloneNode(true));
             })
             
@@ -256,8 +277,6 @@
       },
       error: function(status, data) {
           console.log(data);
-          // status = http status
-          // do something
       }
   });
 }
