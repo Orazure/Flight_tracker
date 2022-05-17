@@ -79,7 +79,7 @@
             var nE = bounds._northEast;
             var bbox = [sW.lat, sW.lng, nE.lat, nE.lng].join(',');
             var xmlHttp = new XMLHttpRequest();
-            xmlHttp.open("GET", "http://impossibly.fr:1026/v2/entities?type=LiveFlight", false); 
+            xmlHttp.open("GET", "https://impossibly.fr/getFlight", false); 
             xmlHttp.send(null);
             var response = JSON.parse(xmlHttp.responseText);
             planes=response
