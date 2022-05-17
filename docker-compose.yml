@@ -7,8 +7,6 @@ services:
     build: .
     volumes:
       - ./apps:/apps
-    networks:
-      - web_network
   nginx:
     container_name: nginx
     restart: always
@@ -17,8 +15,6 @@ services:
       - "85:85"
     volumes:
       - ./nginx:/etc/nginx/conf.d
-    networks:
-      - web_network
     depends_on:
       - ui-ft
   mongo:
@@ -61,6 +57,3 @@ services:
       - '3306:3306'
     volumes:
       - ./draco-db:/var/lib/mysql
-networks:
-  web_network:
-    driver: bridge
