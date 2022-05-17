@@ -49,8 +49,8 @@ def index():
 @blueprint.route('/getFlight')
 @login_required
 def getFlight():
-    print(requests.get("http://impossibly.fr:1026/v2/entities?types=LiveFlight"))
-    return requests.get("http://impossibly.fr:1026/v2/entities?types=LiveFlight")
+    print(requests.get("http://impossibly.fr:1026/v2/entities?types=LiveFlight").text)
+    return requests.get("http://impossibly.fr:1026/v2/entities?types=LiveFlight").text
 
 
 
