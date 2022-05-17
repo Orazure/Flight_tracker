@@ -1,22 +1,14 @@
-version: '3.8'
+version: '3'
 services:
   ui-ft:
     container_name: flight_tracker_ui
     restart: always
     env_file: .env
     build: .
+    ports:
+      - "5005:5005"
     volumes:
       - ./apps:/apps
-  nginx:
-    container_name: nginx
-    restart: always
-    image: "nginx:latest"
-    ports:
-      - "85:85"
-    volumes:
-      - ./nginx:/etc/nginx/conf.d
-    depends_on:
-      - ui-ft
   mongo:
     image: mongo:4.4
     command: --nojournal
