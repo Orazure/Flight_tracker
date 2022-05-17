@@ -54,8 +54,8 @@ services:
     environment:
       - MYSQL_DATABASE=draco-db
       - MYSQL_USER=user
-      - MYSQL_PASSWORD=password
-      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_PASSWORD=6L?op69RSYhT6a7ni?P6
+      - MYSQL_ROOT_PASSWORD=6L?op69RSYhT6a7ni?P6
       - MYSQL_ROOT_HOST=%
     ports:
       - '3306:3306'
