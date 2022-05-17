@@ -1,26 +1,14 @@
-version: '3.8'
+version: '3'
 services:
   ui-ft:
     container_name: flight_tracker_ui
     restart: always
     env_file: .env
     build: .
+    ports:
+      - "5005:5005"
     volumes:
       - ./apps:/apps
-    networks:
-      - web_network
-  nginx:
-    container_name: nginx
-    restart: always
-    image: "nginx:latest"
-    ports:
-      - "85:85"
-    volumes:
-      - ./nginx:/etc/nginx/conf.d
-    networks:
-      - web_network
-    depends_on:
-      - ui-ft
   mongo:
     image: mongo:4.4
     command: --nojournal
@@ -54,13 +42,10 @@ services:
     environment:
       - MYSQL_DATABASE=draco-db
       - MYSQL_USER=user
-      - MYSQL_PASSWORD=password
-      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_PASSWORD=6L?op69RSYhT6a7ni?P6
+      - MYSQL_ROOT_PASSWORD=6L?op69RSYhT6a7ni?P6
       - MYSQL_ROOT_HOST=%
     ports:
       - '3306:3306'
     volumes:
       - ./draco-db:/var/lib/mysql
-networks:
-  web_network:
-    driver: bridge
