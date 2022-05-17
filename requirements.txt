@@ -13,3 +13,7 @@ flask-restx==0.5.1
 Werkzeug==2.0.3
 requests==2.22.0
 loguru==0.6.0
+python-dotenv == 0.20.0
+celery == 5.2.6
+redis == 4.2.2
+flower==1.0.0
