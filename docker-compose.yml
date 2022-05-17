@@ -49,3 +49,42 @@ services:
       - '3306:3306'
     volumes:
       - ./draco-db:/var/lib/mysql
+  worker:
+    container_name: FlightTrackerWorker
+    build: .
+    command: celery -A apps.celery.worker.celery worker --loglevel=info
+    volumes:
+      - ./apps:/apps
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - ui-ft
+  scheduler:
+    container_name: FlightTrackerScheduler
+    build: .
+    command: celery -A apps.celery.worker.celery beat --schedule=/tmp/celerybeat-schedule --loglevel=INFO
+    volumes:
+      - ./apps:/apps
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - ui-ft
+  redis:
+    container_name: FlightTrackerRedis
+    image: redis:6-alpine
+    depends_on:
+      - ui-ft
+  dashboard:
+    container_name: FlightTrackerDashboard
+    build: .
+    command: celery -A apps.celery.worker.celery flower --port=5555 --broker=redis://redis:6379/0
+    ports:
+      - 5556:5555
+    env_file:
+      - .env
+    depends_on:
+      - worker
+      - redis
+      - ui-ft
