@@ -4,7 +4,7 @@ from apps.home import blueprint
 from flask import render_template, request,jsonify
 from flask_login import login_required
 from jinja2 import TemplateNotFound
-import json
+import json,requests
 from datetime import datetime
 
 from apps.DAL.flights import FlightDAL
@@ -45,6 +45,12 @@ def index():
     segment = get_segment(request)
     
     return render_template('home/index.html', segment='index')
+
+@blueprint.route('/getFlight')
+@login_required
+def getFlight():
+    return jsonify(requests.get("http://impossibly.fr:1026/v2/entities?types=LiveFlight"))
+
 
 
 @blueprint.route('/<template>')
