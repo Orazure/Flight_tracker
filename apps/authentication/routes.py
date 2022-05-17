@@ -1,7 +1,5 @@
 # -*- encoding: utf-8 -*-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
+
 
 from flask import render_template, redirect, request, url_for
 from flask_login import (
@@ -83,10 +81,7 @@ def register():
         db.session.add(user)
         db.session.commit()
 
-        return render_template('accounts/register.html',
-                               msg='User created please <a href="/login">login</a>',
-                               success=True,
-                               form=create_account_form)
+        return redirect(url_for('authentication_blueprint.login'))
 
     else:
         return render_template('accounts/register.html', form=create_account_form)
