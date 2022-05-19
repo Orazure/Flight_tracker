@@ -3,6 +3,8 @@ from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from importlib import import_module
 from flask_mail import Mail
+from apps.celery.celery_util import init_celery
+from apps.celery import celery
 
 
 db = SQLAlchemy()
@@ -14,6 +16,7 @@ def register_extensions(app):
     db.init_app(app)
     login_manager.init_app(app)
     mail.init_app(app)
+    init_celery(app, celery)
 
 
 def register_blueprints(app):

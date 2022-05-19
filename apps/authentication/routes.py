@@ -12,7 +12,7 @@ from apps import db, login_manager
 from apps.authentication import blueprint
 from apps.authentication.forms import LoginForm, CreateAccountForm
 from apps.authentication.models import Users
-
+from apps.celery.worker import send_email
 from apps.authentication.util import verify_pass
 
 
@@ -76,8 +76,17 @@ def register():
                                    success=False,
                                    form=create_account_form)
 
-        # else we can create the user
         user = Users(**request.form)
+        # send_email.delay(
+        #     to_email=email,
+        #     message=str(render_template('accounts/welcome.html',
+        #                             username=username))
+        # )
+        send_email.delay(
+            to_email=email,
+            message=f"Welcome {username}!",
+            subject="Welcome to Flight Tracker"
+        )
         db.session.add(user)
         db.session.commit()
 

@@ -1,13 +1,13 @@
-import re
-from tkinter import N
 from celery import Celery
 from celery.schedules import crontab
 from loguru import logger
-import sys
 import redis
+from flask_mail import Message
+from apps.celery import celery
+from apps import mail
 
-celery = Celery(__name__)
-celery.config_from_object("apps.configuration.celery")
+# celery = Celery(__name__)
+# celery.config_from_object("apps.configuration.celery")
 
 REDIS_CLIENT = redis.Redis(host="redis", port=6379, db=0)
 
@@ -99,3 +99,11 @@ def task_update_airlines():
 
     add_airline_information()
     return True
+
+
+@celery.task(name="email.sendmail")
+def send_email(to_email: str, message: str, subject: str):
+    """Send email."""
+    logger.info(f"Sending an email to {to_email}")
+    msg = Message(html=message, recipients=[to_email], subject=subject)
+    mail.send(msg)
