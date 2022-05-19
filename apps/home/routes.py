@@ -10,6 +10,7 @@ from datetime import datetime
 from apps.DAL.flights import FlightDAL
 from apps.DAL.live_flight import LiveFlightDAL
 from apps.configuration import SUPPORTED_FLIGHTS, SUPPORTED_AIRPORTS
+from apps.celery.worker import send_email
 
 @blueprint.route('/index', methods=['GET', 'POST'])
 @login_required
@@ -49,7 +50,6 @@ def index():
 @blueprint.route('/getFlight')
 @login_required
 def getFlight():
-    print(requests.get("http://impossibly.fr:1026/v2/entities?types=LiveFlight").text)
     return requests.get("http://impossibly.fr:1026/v2/entities?types=LiveFlight").text
 
 
@@ -75,6 +75,12 @@ def route_template(template):
     except:
         return render_template('home/page-500.html'), 500
 
+
+@blueprint.route('/notify/delay')
+@login_required
+def notify_delay():
+    send_email.delay('ggguille80@gmail.com', 'test')
+    return 'ok'
 # @blueprint.route('/search/data')
 # @login_required
 # def dataFlight():
