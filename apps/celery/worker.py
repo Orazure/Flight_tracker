@@ -105,5 +105,10 @@ def task_update_airlines():
 def send_email(to_email: str, message: str, subject: str):
     """Send email."""
     logger.info(f"Sending an email to {to_email}")
-    msg = Message(html=message, recipients=[to_email], subject=subject)
+    msg = Message(
+        html=message,
+        recipients=[to_email],
+        subject=subject,
+        extra_headers={"Content-Type": "text/html"},
+    )
     mail.send(msg)

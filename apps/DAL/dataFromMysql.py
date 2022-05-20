@@ -1,11 +1,16 @@
-
-from apps.configuration import userMysql, passwordMysql, hostMysql, databaseMysql   
+from apps.configuration import userMysql, passwordMysql, hostMysql, databaseMysql
 
 import mysql.connector
 
+
 class Database:
     def __init__(self):
-        self._conn = mysql.connector.connect(host=hostMysql,database= databaseMysql,user= userMysql,password= passwordMysql)
+        self._conn = mysql.connector.connect(
+            host=hostMysql,
+            database=databaseMysql,
+            user=userMysql,
+            password=passwordMysql,
+        )
         self._cursor = self._conn.cursor()
 
     def __enter__(self):
@@ -39,7 +44,6 @@ class Database:
 
     def fetchone(self):
         return self.cursor.fetchone()
-    
 
     def query(self, sql, params=None):
         self.cursor.execute(sql, params or ())
