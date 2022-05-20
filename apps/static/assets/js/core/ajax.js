@@ -103,7 +103,7 @@
                     var response;
                     switch (setting.response) {
                         case 'json':
-                            console.log(xhr.response);
+                           // console.log(xhr.response);
                             response = JSON.parse(xhr.response);
                             break;
                         case 'xml':

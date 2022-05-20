@@ -18,6 +18,7 @@
   <link href="/static/assets/css/nucleo-icons.css" rel="stylesheet" />
   <link href="/static/assets/css/nucleo-svg.css" rel="stylesheet" />
   <link rel="stylesheet" href="/static/assets/js/leaflet.css" />
+  <link href="/static/assets/css/all.css" rel="stylesheet"/> 
   <!-- Font Awesome Icons -->
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
   <link href="/static/assets/css/nucleo-svg.css" rel="stylesheet" />
@@ -79,7 +80,7 @@
             var nE = bounds._northEast;
             var bbox = [sW.lat, sW.lng, nE.lat, nE.lng].join(',');
             var xmlHttp = new XMLHttpRequest();
-            xmlHttp.open("GET", "https://impossibly.fr/getFlight", false); 
+            xmlHttp.open("GET", "http://impossibly.fr:1026/v2/entities?types=LiveFlight", false); 
             xmlHttp.send(null);
             var response = JSON.parse(xmlHttp.responseText);
             planes=response

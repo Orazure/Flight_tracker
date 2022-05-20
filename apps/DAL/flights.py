@@ -48,8 +48,25 @@ class FlightDAL:
             >>> dal.get_flights_from_icao('LFPG', 'KJFK')
             [{'id': 'Flight_1', 'departsFromAirport.value': 'LFPG', ...]
         """
+        # params = {
+        #     "type": "Flight",
+        #     "q": f"departsFromAirport==airport-{dep_icao};arrivesToAirport==airport-{arr_icao};dateDeparture>{dateDeparture.isoformat()}",
+        # }
         params = {
             "type": "Flight",
-            "q": f"departsFromAirport==airport-{dep_icao};arrivesToAirport==airport-{arr_icao};dateDeparture>{dateDeparture.isoformat()}",
+            "q": f"departsFromAirport==airport-{dep_icao};arrivesToAirport==airport-{arr_icao}",
         }
+        print(f"{self.orion_url}", params)
         return requests.get(f"{self.orion_url}", params=params).json()
+
+    def get_airline_from_airline_iata(self, airline_icao: str) -> dict:
+        """Get flight from its id.
+
+        Args:
+            airline_icao (str): Id of the flight.
+
+        Returns:
+            dict: The flight.
+        """
+        params = {"type": "Airline"}
+        return requests.get(f"{self.orion_url}/airline-{airline_icao}", params=params).json()
