@@ -39,22 +39,7 @@
     </div>
     <div class="col-xl-3">
       <div class="row">
-        <div class="col-md-6">
-          <div class="card">
-            <div class="card-header mx-4 p-3 text-center">
-              <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
-                <i class="fa-solid fa-plane-slash"></i>
-              </div>
-            </div>
-            <div class="card-body pt-0 p-3 text-center">
-              <h6 class="text-center mb-0">Number of delayed flight</h6>
-              <span class="text-xs">Airline :</span>
-              <hr class="horizontal dark my-3">
-              <h5 class="mb-0" id='numberDelayed'></h5>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 mt-md-0">
+        <div class="col-md-15 mt-md-1">
           <div class="card">
             <div class="card-header mx-4 p-3 text-center">
               <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
@@ -63,9 +48,7 @@
             </div>
             <div class="card-body pt-0 p-3 text-center">
               <h6 class="text-center mb-0">number of flight per day</h6>
-              <span class="text-xs">Airline :</span>
-              <hr class="horizontal dark my-3">
-              <h5 class="mb-0">$455.00</h5>
+              <canvas id="delayed_flights_dognout" width="800" height="400"></canvas>
             </div>
           </div>
         </div>
@@ -80,7 +63,10 @@
         <h6 class="mb-0">Delayed flight by month</h6>
       </div>
       <div class="card-body pt-4 p-3">
-        <canvas id="delayed_flights_chart" width="400" height="200"></canvas>
+        <div>
+          <canvas id="delayed_flights_chart" width="300" height="300"></canvas>
+        </div>
+      
       </div>
     </div>
   </div>
@@ -190,6 +176,10 @@
 <!-- Specific JS goes HERE -->
 {% block javascripts %}
 <script>
+
+  const number_flight_per_day=document.getElementById('number_flight_per_day').innerHTML;
+  const number_flight_per_month=document.getElementById('number_flight_per_month').innerHTML;
+  
   var data = {{ chartData | safe  }};
   const ctx = document.getElementById('delayed_flights_chart').getContext('2d');
   const myChart = new Chart(ctx, {
@@ -241,6 +231,46 @@
       }
     }
   });
+  const config = {
+  type: 'doughnut',
+  data: data,
+};
+  
+  const ctx_ = document.getElementById("delayed_flights_dognout");
+  var myChart_ = new Chart(ctx_, {
+  type: 'doughnut',
+  data: {
+    labels: ['OK', 'WARNING', 'CRITICAL', 'UNKNOWN'],
+    datasets: [{
+      label: '# of Tomatoes',
+      data: [12, 19, 3, 5],
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.5)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)'
+      ],
+      borderColor: [
+        'rgba(255,99,132,1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)'
+      ],
+      borderWidth: 1
+    }]
+  },
+  options: {
+   	//cutoutPercentage: 40,
+    responsive: true,
+
+  }
+});
+
+  
+  
+  
+  
+
 </script>
 
 {% endblock javascripts %}
