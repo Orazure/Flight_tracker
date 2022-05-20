@@ -6,11 +6,11 @@ from flask_login import login_required
 from jinja2 import TemplateNotFound
 import requests
 from datetime import datetime
-
+import random
 from apps.DAL.flights import FlightDAL
 from apps.DAL.live_flight import LiveFlightDAL
 from apps.DAL.airport import AirportDAL
-from apps.configuration import SUPPORTED_FLIGHTS, SUPPORTED_AIRPORTS
+from apps.configuration import SUPPORTED_FLIGHTS
 from apps.DAL.dataFromMysql import Database
 from apps.celery.worker import send_email
 from apps.authentication.models import Users
@@ -44,7 +44,9 @@ def index():
                         str(dep_iata), str(arr_iata), filter_date
                     )
                 else:
-                    flightsData = dal.get_flights_from_icao(str(dep_iata), str(arr_iata))
+                    flightsData = dal.get_flights_from_icao(
+                        str(dep_iata), str(arr_iata)
+                    )
                 # print(flightsData)
                 data.append(flightsData)
         return jsonify(data)
@@ -61,19 +63,38 @@ def index():
 def getFlight():
     return requests.get("http://impossibly.fr:1026/v2/entities?types=LiveFlight").text
 
-@blueprint.route('/billing')
+
+@blueprint.route("/billing")
 @login_required
 def stats():
-    Mysql=Database()
-    dropbox=Mysql.query("SELECT DISTINCT(x002f.attrValue) FROM flight_tracker.x002f WHERE entityType = 'Flight' AND attrName='airline_iata'")
-    print(dropbox)
+    Mysql = Database()
+    dropbox = Mysql.query(
+        "SELECT DISTINCT(x002f.attrValue) FROM flight_tracker.x002f WHERE entityType = 'Flight' AND attrName='airline_iata'"
+    )
     # remove (',') from the list dropbox
-    dropbox=[x[0] for x in dropbox]
-    print(dropbox)
-    return render_template('home/billing.html', segment='billing',dropbox=dropbox)
+    dropbox = [x[0] for x in dropbox]
+    temp = []
+    data = []
+    data_graph = Mysql.query(
+        "SELECT x002f.entityId,recvTime FROM flight_tracker.x002f WHERE entityType = 'Flight' AND attrName='delayed' AND attrValue!='null';"
+    )
+    # remove duplicates entityId
+    for x in data_graph:
+        if x[0] not in temp:
+            temp.append(x[0])
+            data.append(x)
+    # count the number of flight by month
+    values = [random.randint(1, 5) for x in range(1, 13)]
+    for flight in data:
+        date = datetime.strptime(flight[1], "%m/%d/%Y %H:%M:%S")
+        values[date.month - 1] += 1
+    print(values)
+    return render_template(
+        "home/billing.html", segment="billing", dropbox=dropbox, chartData=values
+    )
 
 
-@blueprint.route('/getAirline')
+@blueprint.route("/getAirline")
 @login_required
 def getArline():
     # Mysql=Database()
@@ -82,10 +103,12 @@ def getArline():
     # # remove (',') from the list dropbox
     # dropbox=[x[0] for x in dropbox]
     # print(dropbox)
-    return requests.get("http://impossibly.fr:1026/entities/airline-LNK?type=Airline").text
+    return requests.get(
+        "http://impossibly.fr:1026/entities/airline-LNK?type=Airline"
+    ).text
 
 
-@blueprint.route('/<template>')
+@blueprint.route("/<template>")
 @login_required
 def route_template(template):
 
@@ -123,12 +146,6 @@ def notify_delay():
         )
     return "ok"
 
-
-# @blueprint.route('/search/data')
-# @login_required
-# def dataFlight():
-
-#     return render_template('home/index.html', segment='index')
 
 # Helper - Extract current page name from request
 def get_segment(request):
