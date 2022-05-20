@@ -138,10 +138,10 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-4">
+        <div class="col-lg-4"  id="mainDiv"style="display:none;">
           <div class="card h-100">
             <div class="card-header pb-0">
-              <h6> Flight </h6>
+              <h6> Flight Information </h6>
               <!-- <p class="text-sm">
                 <i class="fa fa-arrow-up text-success" aria-hidden="true"></i>
                 <span class="font-weight-bold">24%</span> this month
@@ -266,16 +266,6 @@
         Hours.style.display="none";
       }
     }
-
-    // function event onclick for option2
-
-
-    
-
-
-
-    
-    
     //return the value of the checked radio button
     Flight.onchange = function() {
       var values = [].filter.call(document.getElementsByName('flight[]'), (c) => c.checked).map(c => c.value);
@@ -319,11 +309,14 @@
             tds[3].innerText = DATAS.flightNumber.value;
             tds[4].innerText = DATAS.flightNumberIATA.value;
            // tds[5].innerText = DATAS.product_dateCreation;
-
-            tds[5].innerText = DATAS.dateDeparture.value;
+            var ps = new Date(DATAS.dateDeparture.value);
+            ps = ps.toDateString() + " " + ps.getHours() + ":"+ ps.getMinutes() + " hrs"; 
+            tds[5].innerText = ps;
             console.log(DATAS.airline_icao.value);
             tds[6].innerText = DATAS.airline_icao.value;
-            tds[7].innerText = DATAS.dateArrival.value;
+            var ps = new Date(DATAS.dateArrival.value);
+            ps = ps.toDateString() + " " + ps.getHours() + ":"+ ps.getMinutes() + " hrs";
+            tds[7].innerText = ps;
             tds[8].innerText = Math.round(DATAS.duration.value/60);
             referenceTab.querySelector('tbody').appendChild(clone.cloneNode(true));
             })
@@ -336,58 +329,49 @@
     });
   }
 
-const Refresh = () => {
-		document.location.reload();
-	}
+  const Refresh = () => {
+      document.location.reload();
+    }
   
     const test =(id) => {
-
       //if he are some content in contentFlight then remove it
-     
-    console.log(id);
-    let hours="";
-    let durée ="";
-    let date;
-    let date2;
-    let hours2;
-    let delay;
-    let name;
-    hours=document.getElementById(id).querySelectorAll('#hours')[0].innerHTML;
-    durée=document.getElementById(id).querySelectorAll('#durée')[0].innerHTML;
-    date=document.getElementById(id).querySelectorAll('#date')[0].innerHTML;
-    date2=document.getElementById(id).querySelectorAll('#date2')[0].innerHTML;
-    hours2=document.getElementById(id).querySelectorAll('#hours2')[0].innerHTML;
-    delay=document.getElementById(id).querySelectorAll('#delay')[0].innerHTML;
-    name=document.getElementById(id).querySelectorAll('#name')[0].innerHTML;
-    airline_icao=document.getElementById(id).querySelectorAll('#airline_iata')[0].innerHTML;
-    //add this value on div contentFlight 
-    var ajaxData = new ajax({
-      method: 'POST',
-      url: '/getAirline',
-      data: {
-          data: airline_icao
-      },
-      response: 'json',
-      setRequestHeader: {
-          'X-Requested-With': 'XMLHttpRequest',
-          'X-Token': 'HAHA'
-      },
-      success: function (data) {
-          console.log(data.name.value);
-          //document.getElementById('contentFlight').querySelectorAll('#hoursP')[0].innerHTML+=data.name.value;
-          document.getElementById('contentFlight').querySelectorAll('#hoursP')[0].innerHTML ="La compagnie : "+data.name.value;
-          document.getElementById('contentFlight').querySelectorAll('#duréeP')[0].innerHTML ="Durée : "+durée +"h";         
-          
-          // data.forEach(function(TEST){
-          //   TEST.forEach(function(DATAS){
-          //     console.log(DATAS.name.value);
-              
-          //   // add id to each tr
-          //     console.log(DATAS);
-          //     // data is equal at a name of airline ,
+      let hours="";
+      let durée ="";
+      let date;
+      let date2;
+      let hours2;
+      let delay;
+      let name;
+      hours=document.getElementById(id).querySelectorAll('#hours')[0].innerHTML;
+      durée=document.getElementById(id).querySelectorAll('#durée')[0].innerHTML;
+      date=document.getElementById(id).querySelectorAll('#date')[0].innerHTML;
+      date2=document.getElementById(id).querySelectorAll('#date2')[0].innerHTML;
+      hours2=document.getElementById(id).querySelectorAll('#hours2')[0].innerHTML;
+      delay=document.getElementById(id).querySelectorAll('#delay')[0].innerHTML;
+      name=document.getElementById(id).querySelectorAll('#name')[0].innerHTML;
+      airline_icao=document.getElementById(id).querySelectorAll('#airline_iata')[0].innerHTML;
+      //add this value on div contentFlight 
+      var ajaxData = new ajax({
+        method: 'POST',
+        url: '/getAirline',
+        data: {
+            data: airline_icao
+        },
+        response: 'json',
+        setRequestHeader: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-Token': 'HAHA'
+        },
+        success: function (data) {
+            console.log(data.name.value);
+            //document.getElementById('contentFlight').querySelectorAll('#hoursP')[0].innerHTML+=data.name.value;
+            mainDiv.style.display="block";
+            document.getElementById('contentFlight').querySelectorAll('#hoursP')[0].innerHTML ="La compagnie : <b>"+data.name.value+"</b>";
+            document.getElementById('contentFlight').querySelectorAll('#duréeP')[0].innerHTML ="Durée : "+durée +"h";         
             
-          
-      },
+              
+            
+        },
       error: function(status, data) {
           console.log(data);
       }
