@@ -71,9 +71,32 @@
               </div>
             </div>
           </div>
-        </div>
+      <div class="test container-fluid py-2" >
+        <div class="row">
+
+       
+     
+        <div class="col-xl-7">
+            <div class="col-md-4">
+              <div class="card h-100" id="contentFlight" style="display: block;">
+                <div class="card-body p-3">
+                    <h6 class="mb">Flight  </h6> <p id="numbFlight"></p>
+                  <div class="card-body p-1" id="">
+                    <p id="duréeP">Durée : </p>
+                      <p id="hoursP"></p>
+                      <p id="nameP"></p>
+                      <p id="dateP"></p>
+                      <p id="priceP"></p>
+                  </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div> 
+         </div>
       </div>
-      </div>
+    </div>
+      
       
      
       
@@ -113,8 +136,8 @@
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">retard</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">code number of flight</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name of flight</th>
-                      <!-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">airline</th> -->
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">date de depart</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">airline</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">date d'arrivée</th>
                       <th class="text-center text-uppercase text-secondary text-xxs">durée du vol</th>
                     </tr>
@@ -123,16 +146,16 @@
                   </tbody>
                 </table>
                 <template id="templateTableLine">
-                  <tr>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
-                    <td class="text-center"></td>
+                  <tr id="" onclick="test(id)">
+                    <td id="hours" class="text-center"></td>
+                    <td id="hours2" class="text-center"></td>
+                    <td id="delay"class="text-center"></td>
+                    <td id="code"class="text-center"></td>
+                    <td id="name"class="text-center"></td>
+                    <td id="date"class="text-center"></td>
+                    <td id="airline_iata" class="text-center"></td>
+                    <td id="date2"class="text-center"></td>
+                    <td id="durée"class="text-center"></td>
                   </tr>
                 </template>
               </div>
@@ -221,6 +244,9 @@
 {% block javascripts %}
 
   <script>
+
+    // code airline_iata with name of airline
+
     
 
     var option1=document.getElementById('flightOption1');
@@ -259,17 +285,27 @@
               'X-Token': 'HAHA'
           },
           success: function (data) {
-              console.log(data);
+            // add id on each tr
+            
+              
               if (data.length === 0)
               {
                 Refresh();
               }
               let clone = document.importNode(templateTableLine.content, true);
+              // get tr element
+              
               let tds = clone.querySelectorAll('td');
               data.forEach(function(TEST){
                 TEST.forEach(function(DATAS){
+                  // console.log(DATAS);
                 var ps = new Date(DATAS.dateETOT.value);
+                // add id to each tr
+                
+                
+                
                 ps = ps.toDateString() + " " + ps.getHours() + ":"+ ps.getMinutes() + " hrs"; 
+                 
                 tds[0].innerText = ps;
                 var ps = new Date(DATAS.dateSLDT.value);
                 ps = ps.toDateString() + " " + ps.getHours() + ":"+ ps.getMinutes() + " hrs"; 
@@ -279,8 +315,10 @@
                 tds[4].innerText = DATAS.flightNumberIATA.value;
               // tds[5].innerText = DATAS.product_dateCreation;
                 tds[5].innerText = DATAS.dateDeparture.value;
-                tds[6].innerText = DATAS.dateArrival.value;
-                tds[7].innerText = Math.round(DATAS.duration.value/60);
+                console.log(DATAS.airline_iata.value);
+                tds[6].innerText = DATAS.airline_icao.value;
+                tds[7].innerText = DATAS.dateArrival.value;
+                tds[8].innerText = Math.round(DATAS.duration.value/60);
                 referenceTab.querySelector('tbody').appendChild(clone.cloneNode(true));
                 })
                 
@@ -299,6 +337,10 @@
         Hours.style.display="none";
       }
     }
+
+    // function event onclick for option2
+
+
     
 
 
@@ -329,9 +371,15 @@
             Refresh();
           }
           let clone = document.importNode(templateTableLine.content, true);
+          //add id on each tr
+          let tr=clone.querySelectorAll('tr');
           let tds = clone.querySelectorAll('td');
           data.forEach(function(TEST){
             TEST.forEach(function(DATAS){
+            // add id to each tr
+            console.log(tr);
+            tr[0].id=DATAS.id;
+            
             var ps = new Date(DATAS.dateETOT.value);
             ps = ps.toDateString() + " " + ps.getHours() + ":"+ ps.getMinutes() + " hrs"; 
             tds[0].innerText = ps;
@@ -342,9 +390,12 @@
             tds[3].innerText = DATAS.flightNumber.value;
             tds[4].innerText = DATAS.flightNumberIATA.value;
            // tds[5].innerText = DATAS.product_dateCreation;
+
             tds[5].innerText = DATAS.dateDeparture.value;
-            tds[6].innerText = DATAS.dateArrival.value;
-            tds[7].innerText = Math.round(DATAS.duration.value/60);
+            console.log(DATAS.airline_iata.value);
+                tds[6].innerText = DATAS.airline_iata.value;
+            tds[7].innerText = DATAS.dateArrival.value;
+            tds[8].innerText = Math.round(DATAS.duration.value/60);
             referenceTab.querySelector('tbody').appendChild(clone.cloneNode(true));
             })
             
@@ -359,8 +410,78 @@
 const Refresh = () => {
 		document.location.reload();
 	}
+  
+    const test =(id) => {
 
+      //if he are some content in contentFlight then remove it
+      if(contentFlight.querySelector('div').childNodes.length>0){
+        document.getElementById('contentFlight').querySelectorAll('#hoursP')[0].innerHTML="";
+        document.getElementById('contentFlight').querySelectorAll('#nameP')[0].innerHTML="";
+        document.getElementById('contentFlight').querySelectorAll('#dateP')[0].innerHTML="";
+        document.getElementById('contentFlight').querySelectorAll('#priceP')[0].innerHTML="";
+        document.getElementById('contentFlight').querySelectorAll('#duréeP')[0].innerHTML="";
+      }
+    console.log(id);
+    let hours="";
+    let durée ="";
+    let date;
+    let date2;
+    let hours2;
+    let delay;
+    let name;
+    hours=document.getElementById(id).querySelectorAll('#hours')[0].innerHTML;
+    durée=document.getElementById(id).querySelectorAll('#durée')[0].innerHTML;
+    date=document.getElementById(id).querySelectorAll('#date')[0].innerHTML;
+    date2=document.getElementById(id).querySelectorAll('#date2')[0].innerHTML;
+    hours2=document.getElementById(id).querySelectorAll('#hours2')[0].innerHTML;
+    delay=document.getElementById(id).querySelectorAll('#delay')[0].innerHTML;
+    name=document.getElementById(id).querySelectorAll('#name')[0].innerHTML;
+    airline_iata=document.getElementById(id).querySelectorAll('#airline_iata')[0].innerHTML;
+    //add this value on div contentFlight 
+    var ajaxData = new ajax({
+      method: 'POST',
+      url: '/index',
+      data: {
+          data: airline_iata
+      },
+      response: 'json',
+      setRequestHeader: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-Token': 'HAHA'
+      },
+      success: function (data) {
+          console.log(data);
+          let clone = document.importNode(templateTableLine.content, true);
+          //add id on each tr
+          let tr=clone.querySelectorAll('tr');
+          let tds = clone.querySelectorAll('td');
+          data.forEach(function(TEST){
+            TEST.forEach(function(DATAS){
+            // add id to each tr
+              console.log(DATAS);
+              // data is equal at a name of airline ,
+            })
+          });
+      },
+      error: function(status, data) {
+          console.log(data);
+      }
+    });
 
+    // document.getElementById('contentFlight').querySelectorAll('#duréeP')[0].innerHTML+=durée;
+    // document.getElementById('contentFlight').querySelectorAll('#hoursP')[0].innerHTML+=hours;
+    // document.getElementById('contentFlight').querySelectorAll('#nameP')[0].innerHTML+=name;
+    // document.getElementById('contentFlight').querySelectorAll('#dateP')[0].innerHTML+=date;
+    // document.getElementById('contentFlight').querySelectorAll('#priceP')[0].innerHTML+=date2;
+    // document.getElementById('contentFlight').querySelectorAll('#hoursP')[0].innerHTML+=hours2;
+    
+
+    
+
+    
+
+  }
+  
   
 
 

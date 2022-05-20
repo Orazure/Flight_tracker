@@ -10,6 +10,7 @@ from datetime import datetime
 from apps.DAL.flights import FlightDAL
 from apps.DAL.live_flight import LiveFlightDAL
 from apps.configuration import SUPPORTED_FLIGHTS, SUPPORTED_AIRPORTS
+from apps.DAL.dataFromMysql import Database
 
 @blueprint.route('/index', methods=['GET', 'POST'])
 @login_required
@@ -36,6 +37,7 @@ def index():
                     flightsData = dal.get_flights_from_icao(str(dep_iata), str(arr_iata), filter_date)
                 else:
                     flightsData = dal.get_flights_from_icao(str(dep_iata), str(arr_iata))
+                    print(flightsData)
                 # print(flightsData)
                 data.append(flightsData)
         return jsonify(data)
@@ -52,7 +54,27 @@ def getFlight():
     print(requests.get("http://impossibly.fr:1026/v2/entities?types=LiveFlight").text)
     return requests.get("http://impossibly.fr:1026/v2/entities?types=LiveFlight").text
 
+@blueprint.route('/billing')
+@login_required
+def stats():
+    Mysql=Database()
+    dropbox=Mysql.query("SELECT DISTINCT(x002f.attrValue) FROM flight_tracker.x002f WHERE entityType = 'Flight' AND attrName='airline_iata'")
+    print(dropbox)
+    # remove (',') from the list dropbox
+    dropbox=[x[0] for x in dropbox]
+    print(dropbox)
+    return render_template('home/billing.html', segment='billing',dropbox=dropbox)
 
+@blueprint.route('/getAirline')
+@login_required
+def getArline():
+    # Mysql=Database()
+    # dropbox=Mysql.query("SELECT DISTINCT(x002f.attrValue) FROM flight_tracker.x002f WHERE entityType = 'Flight' AND attrName='airline_iata'")
+    # print(dropbox)
+    # # remove (',') from the list dropbox
+    # dropbox=[x[0] for x in dropbox]
+    # print(dropbox)
+    return requests.get("http://impossibly.fr:1026/entities/airline-LNK?type=Airline").text
 
 @blueprint.route('/<template>')
 @login_required
