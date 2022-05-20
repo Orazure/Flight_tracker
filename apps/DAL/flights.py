@@ -56,7 +56,7 @@ class FlightDAL:
             "type": "Flight",
             "q": f"departsFromAirport==airport-{dep_icao};arrivesToAirport==airport-{arr_icao}",
         }
-        print(f"{self.orion_url}", params)
+        
         return requests.get(f"{self.orion_url}", params=params).json()
 
     def get_airline_from_airline_iata(self, airline_icao: str) -> dict:
@@ -69,4 +69,5 @@ class FlightDAL:
             dict: The flight.
         """
         params = {"type": "Airline"}
+        print(f"{self.orion_url} {airline_icao}", params)
         return requests.get(f"{self.orion_url}/airline-{airline_icao}", params=params).json()

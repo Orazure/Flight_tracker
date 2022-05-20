@@ -73,7 +73,7 @@ def stats():
     return render_template('home/billing.html', segment='billing',dropbox=dropbox)
 
 
-@blueprint.route('/getAirline')
+@blueprint.route('/getAirline', methods=["GET", "POST"])
 @login_required
 def getArline():
     # Mysql=Database()
@@ -82,7 +82,14 @@ def getArline():
     # # remove (',') from the list dropbox
     # dropbox=[x[0] for x in dropbox]
     # print(dropbox)
-    return requests.get("http://impossibly.fr:1026/entities/airline-LNK?type=Airline").text
+    dal = FlightDAL()
+    if request.method == "POST":
+        pippo = request.form.to_dict()
+        # si la donnée dans data correspond à ceux dans SUPPORTED_FLIGHTS alors je retourne la valeur de la clé
+        print(pippo["data"])
+        pippo=dal.get_airline_from_airline_iata(pippo["data"])
+        return jsonify(pippo)
+    return "ok"
 
 
 @blueprint.route('/<template>')
