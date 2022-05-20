@@ -49,3 +49,16 @@ class AirportDAL:
         """
         params = {"type": "Airport", "q": f"codeICAO=={icao_code}"}
         return requests.get(f"{self.orion_url}", params=params).json()
+
+    def get_airport_from_id(self, airport_id: str, options: str = "") -> dict:
+        """Get an airport from its id.
+
+        Args:
+            airport_id (str): Id of the airport.
+            options (dict): Options to get the airport.
+
+        Returns:
+            dict: The airport.
+        """
+        params = {"type": "Airport", "options": options}
+        return requests.get(f"{self.orion_url}/{airport_id}", params=params).json()
