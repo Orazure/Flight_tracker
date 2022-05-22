@@ -20,7 +20,8 @@
               </div>
               <div class="card-body position-relative z-index-1 p-3">
                 <p>Option 1 :</p>
-                <select name="pets" id="pet-select">
+                <div id="pet">
+                <select name="pets" id="pet" onChange="change(this.value);">
                   <option value="">--Please choose an airline --</option>
                   {% for emplacement in dropbox %}
 
@@ -28,7 +29,7 @@
                   <option value="{{ emplacement }}"> {{ emplacement }} </option>
                   {% endfor %}
                 </select>
-
+                </div>
                
 
               </div>
@@ -47,7 +48,7 @@
               </div>
             </div>
             <div class="card-body pt-0 p-3 text-center">
-              <h6 class="text-center mb-0">number of flight per day</h6>
+              <h6 class="text-center mb-0">Number of flight</h6>
               <canvas id="delayed_flights_dognout" width="800" height="400"></canvas>
             </div>
           </div>
@@ -176,9 +177,63 @@
 <!-- Specific JS goes HERE -->
 {% block javascripts %}
 <script>
+  let number_flight_delayed=0;
+ 
+  let number_flight_not_delayed=0;
+  
+  change = (id) => {
+    console.log(id);
 
-  const number_flight_per_day=document.getElementById('number_flight_per_day').innerHTML;
-  const number_flight_per_month=document.getElementById('number_flight_per_month').innerHTML;
+    var ajaxData = new ajax({
+          method: 'POST',
+          url: '/billing',
+          data: {
+              data: id
+          },
+          response: 'json',
+          setRequestHeader: {
+              'X-Requested-With': 'XMLHttpRequest',
+              'X-Token': 'HAHA'
+          },
+          success: function (data) {
+            console.log(data.number_delayed);
+            number_flight_delayed=data.number_delayed;
+            number_flight_not_delayed=data.number_not_delayed;
+            const ctx_ = document.getElementById("delayed_flights_dognout");
+            var myChart_ = new Chart(ctx_, {
+            type: 'doughnut',
+            data: {
+              labels: ['Delayed', 'Not Delayed'],
+              datasets: [{
+                label: '# of Tomatoes',
+                data: [number_flight_delayed, number_flight_not_delayed],
+                backgroundColor: [
+                  'rgba(255, 99, 132, 0.5)',
+                  'rgba(54, 162, 235, 0.2)'
+                ],
+                borderColor: [
+                  'rgba(255,99,132,1)',
+                  'rgba(54, 162, 235, 1)'
+                ],
+                borderWidth: 1
+              }]
+            },
+            options: {
+              //cutoutPercentage: 40,
+              responsive: true,
+
+            }
+});
+            
+          },
+          error: function(status, data) {
+              console.log(data);
+          }
+        });
+      }
+  
+
+  
   
   var data = {{ chartData | safe  }};
   const ctx = document.getElementById('delayed_flights_chart').getContext('2d');
@@ -236,35 +291,7 @@
   data: data,
 };
   
-  const ctx_ = document.getElementById("delayed_flights_dognout");
-  var myChart_ = new Chart(ctx_, {
-  type: 'doughnut',
-  data: {
-    labels: ['OK', 'WARNING', 'CRITICAL', 'UNKNOWN'],
-    datasets: [{
-      label: '# of Tomatoes',
-      data: [12, 19, 3, 5],
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.5)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 206, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)'
-      ],
-      borderColor: [
-        'rgba(255,99,132,1)',
-        'rgba(54, 162, 235, 1)',
-        'rgba(255, 206, 86, 1)',
-        'rgba(75, 192, 192, 1)'
-      ],
-      borderWidth: 1
-    }]
-  },
-  options: {
-   	//cutoutPercentage: 40,
-    responsive: true,
-
-  }
-});
+  
 
   
   
