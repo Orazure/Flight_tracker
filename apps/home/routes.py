@@ -12,7 +12,7 @@ from apps.DAL.live_flight import LiveFlightDAL
 from apps.DAL.airport import AirportDAL
 from apps.configuration import SUPPORTED_FLIGHTS
 from apps.DAL.dataFromMysql import Database
-
+from apps.celery.worker import send_email
 from apps.authentication.models import Users
 
 
