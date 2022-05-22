@@ -5,7 +5,7 @@ from flask import render_template, request, jsonify
 from flask_login import login_required
 from jinja2 import TemplateNotFound
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 import random
 from apps.DAL.flights import FlightDAL
 from apps.DAL.live_flight import LiveFlightDAL
@@ -61,7 +61,11 @@ def index():
 @blueprint.route("/getFlight")
 @login_required
 def getFlight():
-    return requests.get("http://impossibly.fr:1026/v2/entities?types=LiveFlight").text
+    date = datetime.now()
+    # date minus 15 minutes
+    dateiso_minus = date - timedelta(minutes=15)
+    print(dateiso_minus)
+    return requests.get(f"http://impossibly.fr:1026/v2/entities?type=LiveFlight&q=last_update>{dateiso_minus.isoformat()};last_update<{date.isoformat()}").text
 
 
 @blueprint.route("/billing", methods=["GET", "POST"])
@@ -106,7 +110,6 @@ def stats():
     return render_template(
         "home/billing.html", segment="billing", dropbox=dropbox, chartData=values
     )
-
 
 
 @blueprint.route('/getAirline', methods=["GET", "POST"])

@@ -86,7 +86,7 @@
       var date_minus = new Date(date - 15 * 60000)
       var dateISO_minus = `${date_minus.getFullYear()}-${date_minus.getMonth() + 1}-${date_minus.getDate()}T${date_minus.getHours()}:${date_minus.getMinutes()}:${date_minus.getSeconds()}Z`
       console.log(dateISO_minus);
-      xmlHttp.open("GET", `http://impossibly.fr:1026/v2/entities?type=LiveFlight&q=last_update>${dateISO_minus};last_update<${dateISO}`, false);
+      xmlHttp.open("GET", `/getFlight`, false);
       xmlHttp.send(null);
       var response = JSON.parse(xmlHttp.responseText);
       planes = response
