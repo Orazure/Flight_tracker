@@ -12,7 +12,7 @@ from apps.DAL.live_flight import LiveFlightDAL
 from apps.DAL.airport import AirportDAL
 from apps.configuration import SUPPORTED_FLIGHTS
 from apps.DAL.dataFromMysql import Database
-from apps.celery.worker import send_email
+
 from apps.authentication.models import Users
 
 
@@ -64,7 +64,7 @@ def getFlight():
     return requests.get("http://impossibly.fr:1026/v2/entities?types=LiveFlight").text
 
 
-@blueprint.route("/billing")
+@blueprint.route("/billing", methods=["GET", "POST"])
 @login_required
 def stats():
     Mysql = Database()
@@ -88,7 +88,21 @@ def stats():
     for flight in data:
         date = datetime.strptime(flight[1], "%m/%d/%Y %H:%M:%S")
         values[date.month - 1] += 1
-    print(values)
+
+
+    #request get with nodered to get the data
+    if request.method == "POST":
+        pippo = request.form.to_dict()
+        data=pippo["data"]
+        # add data to a string request 
+        pippo="SELECT COUNT(DISTINCT(entityId)) FROM flight_tracker.x002f WHERE attrName = 'airline_iata' and attrValue='"+data+"' AND entityID IN (SELECT DISTINCT(x002f.entityId) FROM flight_tracker.x002f WHERE entityType = 'Flight' AND attrValue!='null') GROUP BY attrValue"
+        pippo_delayed="SELECT COUNT(DISTINCT(entityId)) FROM flight_tracker.x002f WHERE attrName = 'airline_iata' and attrValue='"+data+"' AND entityID IN (SELECT DISTINCT(x002f.entityId) FROM flight_tracker.x002f WHERE entityType = 'Flight' AND attrName='delayed' AND attrValue='null') GROUP BY attrValue"
+        number_not_delayed = Mysql.query(pippo)
+        number_delayed = Mysql.query(pippo_delayed)
+        number_delayed=number_delayed[0][0]
+        number_not_delayed=number_not_delayed[0][0]
+        return jsonify({"number_delayed":number_delayed,"number_not_delayed":number_not_delayed})
+
     return render_template(
         "home/billing.html", segment="billing", dropbox=dropbox, chartData=values
     )
