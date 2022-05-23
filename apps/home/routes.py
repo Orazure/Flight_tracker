@@ -115,12 +115,6 @@ def stats():
 @blueprint.route('/getAirline', methods=["GET", "POST"])
 @login_required
 def getArline():
-    # Mysql=Database()
-    # dropbox=Mysql.query("SELECT DISTINCT(x002f.attrValue) FROM flight_tracker.x002f WHERE entityType = 'Flight' AND attrName='airline_iata'")
-    # print(dropbox)
-    # # remove (',') from the list dropbox
-    # dropbox=[x[0] for x in dropbox]
-    # print(dropbox)
     dal = FlightDAL()
     if request.method == "POST":
         pippo = request.form.to_dict()
