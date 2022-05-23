@@ -109,12 +109,10 @@
                     <tr>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Hours depart</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Hours arrivée</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">retard</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">retard (en minute)</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">code number of flight</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name of flight</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">date de depart</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">airline</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">date d'arrivée</th>
                       <th class="text-center text-uppercase text-secondary text-xxs">durée du vol</th>
                     </tr>
                   </thead>
@@ -128,9 +126,7 @@
                     <td id="delay"class="text-center"></td>
                     <td id="code"class="text-center"></td>
                     <td id="name"class="text-center"></td>
-                    <td id="date"class="text-center"></td>
                     <td id="airline_iata" class="text-center"></td>
-                    <td id="date2"class="text-center"></td>
                     <td id="durée"class="text-center"></td>
                   </tr>
                 </template>
@@ -154,7 +150,7 @@
                   <p id="duréeP">Durée : </p>
                   <p id="hoursP">La compagnie :</p>
                   <p id="nameP">Name of flight :</p>
-                  <p id="dateP"></p>
+                  <p id="codeP"></p>
                   <p id="priceP"></p>
               </div>
                
@@ -227,29 +223,21 @@
               data.forEach(function(TEST){
                 TEST.forEach(function(DATAS){
                   // console.log(DATAS);
-                var ps = new Date(DATAS.dateETOT.value);
-                // add id to each tr
-                
-                
-                
-                ps = ps.toDateString() + " " + ps.getHours() + ":"+ ps.getMinutes() + " hrs"; 
-                 
-                tds[0].innerText = ps;
-                var ps = new Date(DATAS.dateSLDT.value);
-                ps = ps.toDateString() + " " + ps.getHours() + ":"+ ps.getMinutes() + " hrs"; 
-                tds[1].innerText = ps;
-                DATAS.delayed.value == 'null' ?  tds[2].delayed.value ='En retard' : tds[2].innerText = DATAS.delayed.value;
-                tds[3].innerText = DATAS.flightNumber.value;
-                tds[4].innerText = DATAS.flightNumberIATA.value;
-              // tds[5].innerText = DATAS.product_dateCreation;
-                tds[5].innerText = DATAS.dateDeparture.value;
-                console.log(DATAS.airline_iata.value);
-                tds[6].innerText = DATAS.airline_icao.value;
-                tds[7].innerText = DATAS.dateArrival.value;
-                tds[8].innerText = Math.round(DATAS.duration.value/60);
+                  var ps = new Date(DATAS.dateETOT.value);
+                  ps = ps.toDateString() + " " + ps.getHours() + ":"+ ps.getMinutes() + " hrs"; 
+                  tds[0].innerText = ps;
+                  var ps = new Date(DATAS.dateSLDT.value);
+                  ps = ps.toDateString() + " " + ps.getHours() + ":"+ ps.getMinutes() + " hrs"; 
+                  tds[1].innerText = ps;
+                  DATAS.delayed.value == 'null' ?  tds[2].delayed.value ='En retard' : tds[2].innerText = DATAS.delayed.value;
+                  tds[3].innerText = DATAS.flightNumber.value;
+                  tds[4].innerText = DATAS.flightNumberIATA.value;
+                // tds[5].innerText = DATAS.product_dateCreation;
+                  tds[5].innerText = DATAS.airline_icao.value;
+                  tds[6].innerText = Math.round(DATAS.duration.value/60);
                 referenceTab.querySelector('tbody').appendChild(clone.cloneNode(true));
                 })
-                
+
               });
           },
           error: function(status, data) {
@@ -295,9 +283,9 @@
           data.forEach(function(TEST){
             TEST.forEach(function(DATAS){
             // add id to each tr
-            console.log(tr);
-            tr[0].id=DATAS.id;
             
+            tr[0].id=DATAS.id;
+            console.log(DATAS.dateETOT.value);
             var ps = new Date(DATAS.dateETOT.value);
             ps = ps.toDateString() + " " + ps.getHours() + ":"+ ps.getMinutes() + " hrs"; 
             tds[0].innerText = ps;
@@ -308,15 +296,8 @@
             tds[3].innerText = DATAS.flightNumber.value;
             tds[4].innerText = DATAS.flightNumberIATA.value;
            // tds[5].innerText = DATAS.product_dateCreation;
-            var ps = new Date(DATAS.dateDeparture.value);
-            ps = ps.toDateString() + " " + ps.getHours() + ":"+ ps.getMinutes() + " hrs"; 
-            tds[5].innerText = ps;
-            console.log(DATAS.airline_icao.value);
-            tds[6].innerText = DATAS.airline_icao.value;
-            var ps = new Date(DATAS.dateArrival.value);
-            ps = ps.toDateString() + " " + ps.getHours() + ":"+ ps.getMinutes() + " hrs";
-            tds[7].innerText = ps;
-            tds[8].innerText = Math.round(DATAS.duration.value/60);
+            tds[5].innerText = DATAS.airline_icao.value;
+            tds[6].innerText = Math.round(DATAS.duration.value/60);
             referenceTab.querySelector('tbody').appendChild(clone.cloneNode(true));
             })
             
@@ -343,11 +324,10 @@
       let name;
       hours=document.getElementById(id).querySelectorAll('#hours')[0].innerHTML;
       durée=document.getElementById(id).querySelectorAll('#durée')[0].innerHTML;
-      date=document.getElementById(id).querySelectorAll('#date')[0].innerHTML;
-      date2=document.getElementById(id).querySelectorAll('#date2')[0].innerHTML;
       hours2=document.getElementById(id).querySelectorAll('#hours2')[0].innerHTML;
       delay=document.getElementById(id).querySelectorAll('#delay')[0].innerHTML;
       name=document.getElementById(id).querySelectorAll('#name')[0].innerHTML;
+      code=document.getElementById(id).querySelectorAll('#code')[0].innerHTML;
       airline_icao=document.getElementById(id).querySelectorAll('#airline_iata')[0].innerHTML;
       //add this value on div contentFlight 
       var ajaxData = new ajax({
@@ -366,7 +346,9 @@
             //document.getElementById('contentFlight').querySelectorAll('#hoursP')[0].innerHTML+=data.name.value;
             mainDiv.style.display="block";
             document.getElementById('contentFlight').querySelectorAll('#hoursP')[0].innerHTML ="La compagnie : <b>"+data.name.value+"</b>";
-            document.getElementById('contentFlight').querySelectorAll('#duréeP')[0].innerHTML ="Durée : "+durée +"h";         
+            document.getElementById('contentFlight').querySelectorAll('#duréeP')[0].innerHTML ="Durée : "+durée +"h";  
+            document.getElementById('contentFlight').querySelectorAll('#nameP')[0].innerHTML ="Name of flight : "+ name; 
+            document.getElementById('contentFlight').querySelectorAll('#codeP')[0].innerHTML ="Code du vol: "+ code; 
             
               
             
