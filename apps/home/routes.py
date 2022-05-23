@@ -63,9 +63,11 @@ def index():
 def getFlight():
     date = datetime.now()
     # date minus 15 minutes
-    dateiso_minus = date - timedelta(minutes=15)
+    dateiso_minus = date - timedelta(minutes=2)
     print(dateiso_minus)
-    return requests.get(f"http://impossibly.fr:1026/v2/entities?type=LiveFlight&q=last_update>{dateiso_minus.isoformat()};last_update<{date.isoformat()}").text
+    return requests.get(
+        f"http://impossibly.fr:1026/v2/entities?type=LiveFlight&q=last_update>{dateiso_minus.isoformat()};last_update<{date.isoformat()}"
+    ).text
 
 
 @blueprint.route("/billing", methods=["GET", "POST"])
@@ -93,26 +95,35 @@ def stats():
         date = datetime.strptime(flight[1], "%m/%d/%Y %H:%M:%S")
         values[date.month - 1] += 1
 
-
-    #request get with nodered to get the data
+    # request get with nodered to get the data
     if request.method == "POST":
         pippo = request.form.to_dict()
-        data=pippo["data"]
-        # add data to a string request 
-        pippo="SELECT COUNT(DISTINCT(entityId)) FROM flight_tracker.x002f WHERE attrName = 'airline_iata' and attrValue='"+data+"' AND entityID IN (SELECT DISTINCT(x002f.entityId) FROM flight_tracker.x002f WHERE entityType = 'Flight' AND attrValue!='null') GROUP BY attrValue"
-        pippo_delayed="SELECT COUNT(DISTINCT(entityId)) FROM flight_tracker.x002f WHERE attrName = 'airline_iata' and attrValue='"+data+"' AND entityID IN (SELECT DISTINCT(x002f.entityId) FROM flight_tracker.x002f WHERE entityType = 'Flight' AND attrName='delayed' AND attrValue='null') GROUP BY attrValue"
+        data = pippo["data"]
+        # add data to a string request
+        pippo = (
+            "SELECT COUNT(DISTINCT(entityId)) FROM flight_tracker.x002f WHERE attrName = 'airline_iata' and attrValue='"
+            + data
+            + "' AND entityID IN (SELECT DISTINCT(x002f.entityId) FROM flight_tracker.x002f WHERE entityType = 'Flight' AND attrValue!='null') GROUP BY attrValue"
+        )
+        pippo_delayed = (
+            "SELECT COUNT(DISTINCT(entityId)) FROM flight_tracker.x002f WHERE attrName = 'airline_iata' and attrValue='"
+            + data
+            + "' AND entityID IN (SELECT DISTINCT(x002f.entityId) FROM flight_tracker.x002f WHERE entityType = 'Flight' AND attrName='delayed' AND attrValue='null') GROUP BY attrValue"
+        )
         number_not_delayed = Mysql.query(pippo)
         number_delayed = Mysql.query(pippo_delayed)
-        number_delayed=number_delayed[0][0]
-        number_not_delayed=number_not_delayed[0][0]
-        return jsonify({"number_delayed":number_delayed,"number_not_delayed":number_not_delayed})
+        number_delayed = number_delayed[0][0]
+        number_not_delayed = number_not_delayed[0][0]
+        return jsonify(
+            {"number_delayed": number_delayed, "number_not_delayed": number_not_delayed}
+        )
 
     return render_template(
         "home/billing.html", segment="billing", dropbox=dropbox, chartData=values
     )
 
 
-@blueprint.route('/getAirline', methods=["GET", "POST"])
+@blueprint.route("/getAirline", methods=["GET", "POST"])
 @login_required
 def getArline():
     # Mysql=Database()
@@ -126,7 +137,7 @@ def getArline():
         pippo = request.form.to_dict()
         # si la donnée dans data correspond à ceux dans SUPPORTED_FLIGHTS alors je retourne la valeur de la clé
         print(pippo["data"])
-        pippo=dal.get_airline_from_airline_iata(pippo["data"])
+        pippo = dal.get_airline_from_airline_iata(pippo["data"])
         return jsonify(pippo)
     return "ok"
 
