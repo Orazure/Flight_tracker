@@ -1,12 +1,9 @@
 # -*- encoding: utf-8 -*-
-
 from apps.home import blueprint
 from flask import render_template, request, jsonify
 from flask_login import login_required
 from jinja2 import TemplateNotFound
-import requests
 from datetime import datetime, timedelta
-import random
 from apps.DAL.flights import FlightDAL
 from apps.DAL.live_flight import LiveFlightDAL
 from apps.DAL.airport import AirportDAL
@@ -14,13 +11,12 @@ from apps.configuration import SUPPORTED_FLIGHTS
 from apps.DAL.dataFromMysql import Database
 from apps.celery.worker import send_email
 from apps.authentication.models import Users
-
+import requests,random
 
 @blueprint.route("/index", methods=["GET", "POST"])
 @login_required
 def index():
     dal = FlightDAL()
-    flights = LiveFlightDAL()
     data = []
     if request.method == "POST":
         pippo = request.form.to_dict()
