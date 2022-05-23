@@ -1,11 +1,11 @@
-API_KEY = "9a00f99a-81f1-4a9b-a2f0-53c1d6f30d14"
+API_KEY = "d02ff821-dc4f-4263-9d69-015137c7dc97"
 AIRLABS_URL = "https://airlabs.co/api/v9"
 ORION_URL = "http://orion:1026/v2"
 # ORION_URL = "http://impossibly.fr:1026/v2"
 databaseMysql = "draco-db"
-userMysql="root"
-passwordMysql="6L?op69RSYhT6a7ni?P6"
-hostMysql="impossibly.fr"
+userMysql = "root"
+passwordMysql = "6L?op69RSYhT6a7ni?P6"
+hostMysql = "impossibly.fr"
 # We choose only five flights to limit api calls.
 SUPPORTED_FLIGHTS = [
     {
