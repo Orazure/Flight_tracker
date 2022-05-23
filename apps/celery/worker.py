@@ -41,12 +41,12 @@ def setup_periodic_tasks(sender, **kwargs):
     """Set up task for a periodic execution."""
     # Update data of flights every 15 minutes
     sender.add_periodic_task(
-        crontab(minute="*/15"),
+        crontab(minute="*/10"),
         task_update_flights_information.s(),
     )
     # Update data of live flights every 5 minutes
     sender.add_periodic_task(
-        crontab(minute="*/5"),
+        crontab(minute="*/2"),
         task_update_live_flights.s(),
     )
     # Update airports every month
