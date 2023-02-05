@@ -1,13 +1,36 @@
-# [Flight Tracker]
+# Flight Tracker via API [Airlabs](https://airlabs.co/docs/)
 
 
 <br />
 
-- `Up-to-date dependencies`
-- [SCSS compilation](#recompile-css) via **Gulp**
+- Map to track aircraft in real time 
 - `DBMS`: SQLite, PostgreSQL (production) 
 - Session-Based authentication (via **flask_login**), Forms validation
-- `Deployment`: **Docker**, Gunicorn / Nginx, HEROK
+- `Deployment`: **Docker**, Nginx, Gunicorn
+
+About docker, we use 9 containers :
+
+	 - ui-ft
+	 - mongo (DATABASE)
+	 - orion
+	 - draco
+	 - mysql
+	 - worker
+	 - scheduler
+	 - redis
+	 - dashboard
+	 
+For the stats part we use fiware techno by applying the broker context which is implemented by Orion, it allows us to store the data coming from the API, and to display it.
+![Overview of the functioning](tech_project.png)
+
+To get data from API, we use celery, is really useful because i don't want to use my call API in 10 minutes.
+<br />
+![Website of celery](celery_view_website.png)
+<br />
+Function from python (Celery) :
+<br />
+![Function Celery](func_celery.png)
+
 
 <br />
 
@@ -17,12 +40,9 @@
 
 <br />
 
-
-
-<br />
 
 ## ✨ How to use it
-
+*If you want to test our project, you have to get key API from Airlabs*
 ```bash
 $ # Get the code
 $ git clone https://github.com/app-generator/flask-soft-ui-dashboard.git
