@@ -31,7 +31,7 @@ To get data from API, we use celery, is really useful because i don't want to us
 Function from python (Celery) :
 <br />
 
-![Function Celery](func_celery.png)
+![Function Celery](func_celery.PNG)
 
 
 <br />
