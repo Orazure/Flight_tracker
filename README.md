@@ -21,7 +21,7 @@ About docker, we use 9 containers :
 	 - dashboard
 	 
 For the stats part we use fiware techno by applying the broker context which is implemented by Orion, it allows us to store the data coming from the API, and to display it.
-![Overview of the functioning](tech_project.png)
+![Overview of the functioning](project.PNG)
 
 To get data from API, we use celery, is really useful because i don't want to use my call API in 10 minutes.
 <br />
