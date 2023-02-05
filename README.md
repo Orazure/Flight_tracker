@@ -26,7 +26,7 @@ For the stats part we use fiware techno by applying the broker context which is 
 To get data from API, we use celery, is really useful because i don't want to use my call API in 10 minutes.
 <br />
 
-![Website of celery](celery_view_website.png)
+![Website of celery](celery_view_website.PNG)
 <br />
 Function from python (Celery) :
 <br />
