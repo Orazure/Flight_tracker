@@ -44,7 +44,7 @@ Function from python (Celery) :
 
 
 ## ✨ How to use it
-*If you want to test our project, you have to get key API from Airlabs*
+*If you want to test our project, you have to get key API from Airlabs* (go to Flight_tracker/apps/configuration/__init__.py#L1)
 ```bash
 $ # Get the code
 $ git clone https://github.com/app-generator/flask-soft-ui-dashboard.git
